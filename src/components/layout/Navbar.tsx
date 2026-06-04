@@ -6,10 +6,12 @@ import clsx from 'clsx'
 import styles from './Navbar.module.css'
 
 const navLinks = [
-  { label: 'Trang chủ', to: '/' },
-  { label: 'Sản phẩm', to: '/san-pham' },
-  { label: 'Về chúng tôi', to: '/ve-chung-toi' },
-  { label: 'Liên hệ', to: '/lien-he' },
+  { label: 'Trang chủ', to: '/#hero' },
+  { label: 'Giới thiệu', to: '/#about' },
+  { label: 'Tất Cả Sản Phẩm', to: '/san-pham' },
+  { label: 'Sản phẩm', to: '/#products' },
+  { label: 'Quy trình', to: '/#process' },
+  { label: 'Liên hệ', to: '/#contact' },
 ]
 
 export function Navbar() {
@@ -45,13 +47,12 @@ export function Navbar() {
     }
   }, [])
 
-
   const closeDrawer = () => setIsDrawerOpen(false)
 
   return (
     <header className={clsx(styles.navbar, isScrolled && styles.isScrolled)}>
       <div className={styles.inner}>
-        <NavLink to="/" className={styles.logo} onClick={closeDrawer}>
+        <NavLink to="/#hero" className={styles.logo} onClick={closeDrawer}>
           <span className={styles.logoPrimary}>Việt Giai Hân</span>
           <span className={styles.logoSecondary}>Đồ gỗ mỹ nghệ</span>
         </NavLink>
@@ -61,7 +62,6 @@ export function Navbar() {
             <NavLink
               key={link.to}
               to={link.to}
-              end={link.to === '/'}
               className={({ isActive }) => clsx(styles.navLink, isActive && styles.active)}
             >
               {link.label}
@@ -69,7 +69,7 @@ export function Navbar() {
           ))}
         </nav>
 
-        <NavLink to="/lien-he" className={styles.cta}>
+        <NavLink to="/#contact" className={styles.cta}>
           Liên hệ
         </NavLink>
 
@@ -91,7 +91,7 @@ export function Navbar() {
 
           <aside id="mobile-navigation" className={styles.drawer} aria-modal="true" role="dialog">
             <div className={styles.drawerHeader}>
-              <NavLink to="/" className={styles.logo} onClick={closeDrawer}>
+              <NavLink to="/#hero" className={styles.logo} onClick={closeDrawer}>
                 <span className={styles.logoPrimary}>Việt Giai Hân</span>
                 <span className={styles.logoSecondary}>Đồ gỗ mỹ nghệ</span>
               </NavLink>
@@ -105,7 +105,6 @@ export function Navbar() {
                 <NavLink
                   key={link.to}
                   to={link.to}
-                  end={link.to === '/'}
                   className={({ isActive }) => clsx(styles.mobileLink, isActive && styles.active)}
                   onClick={closeDrawer}
                 >
@@ -114,7 +113,7 @@ export function Navbar() {
               ))}
             </nav>
 
-            <NavLink to="/lien-he" className={styles.mobileCta} onClick={closeDrawer}>
+            <NavLink to="/#contact" className={styles.mobileCta} onClick={closeDrawer}>
               Liên hệ
             </NavLink>
           </aside>

@@ -1,0 +1,103 @@
+const createPlaceholder = (title) =>
+  `https://placehold.co/400x328/f2e3ca/6b4f2a?text=${encodeURIComponent(title)}`
+
+const PRODUCTS = [
+  {
+    id: 1,
+    category: 'Tranh Gỗ',
+    title: 'Tranh Gỗ Sen Việt',
+    description: 'Bức tranh chạm khắc hoa sen trên nền gỗ ấm, phù hợp phòng khách và không gian thờ trang nhã.',
+    badge: 'Thủ Công',
+    image: createPlaceholder('Tranh Gỗ Sen Việt'),
+  },
+  {
+    id: 2,
+    category: 'Tranh Gỗ',
+    title: 'Tranh Gỗ Cá Chép',
+    description: 'Họa tiết cá chép được xử lý tinh tế, mang ý nghĩa may mắn và thịnh vượng cho gia chủ.',
+    badge: 'Bán Chạy',
+    image: createPlaceholder('Tranh Gỗ Cá Chép'),
+  },
+  {
+    id: 3,
+    category: 'Đồng Hồ Gỗ',
+    title: 'Đồng Hồ Gỗ Tròn Tối Giản',
+    description: 'Mặt đồng hồ vân gỗ tự nhiên, thiết kế tối giản dễ phối với không gian sống hiện đại.',
+    badge: 'Mới',
+    image: createPlaceholder('Đồng Hồ Gỗ Tròn Tối Giản'),
+  },
+  {
+    id: 4,
+    category: 'Đồng Hồ Gỗ',
+    title: 'Đồng Hồ Gỗ Treo Tường',
+    description: 'Kiểu dáng treo tường thanh lịch với các chi tiết hoàn thiện thủ công và sắc gỗ trầm ấm.',
+    badge: 'Thủ Công',
+    image: createPlaceholder('Đồng Hồ Gỗ Treo Tường'),
+  },
+  {
+    id: 5,
+    category: 'Hộp Quà',
+    title: 'Hộp Quà Gỗ Hương',
+    description: 'Hộp quà gỗ hương sang trọng dành cho trà, phụ kiện hoặc các bộ quà tặng doanh nghiệp.',
+    badge: 'Giới Hạn',
+    image: createPlaceholder('Hộp Quà Gỗ Hương'),
+  },
+  {
+    id: 6,
+    category: 'Hộp Quà',
+    title: 'Hộp Trà Gỗ Cao Cấp',
+    description: 'Thiết kế nắp khít, vân gỗ đẹp và cảm giác cầm chắc tay, phù hợp làm quà biếu trang nhã.',
+    badge: 'Bán Chạy',
+    image: createPlaceholder('Hộp Trà Gỗ Cao Cấp'),
+  },
+  {
+    id: 7,
+    category: 'Phù Điêu',
+    title: 'Phù Điêu Tùng Hạc',
+    description: 'Tác phẩm phù điêu tùng hạc được chạm nổi nhiều lớp, tạo chiều sâu và vẻ cổ điển cho không gian.',
+    badge: 'Thủ Công',
+    image: createPlaceholder('Phù Điêu Tùng Hạc'),
+  },
+  {
+    id: 8,
+    category: 'Phù Điêu',
+    title: 'Phù Điêu Hoa Lá',
+    description: 'Đường nét hoa lá mềm mại trên nền gỗ tự nhiên, thích hợp làm điểm nhấn cho sảnh và phòng khách.',
+    badge: 'Giới Hạn',
+    image: createPlaceholder('Phù Điêu Hoa Lá'),
+  },
+  {
+    id: 9,
+    category: 'Trang Trí',
+    title: 'Bình Hoa Gỗ Mỹ Nghệ',
+    description: 'Bình hoa gỗ dáng thanh thoát, hoàn thiện mịn và có thể dùng như vật phẩm trang trí độc lập.',
+    badge: 'Bán Chạy',
+    image: createPlaceholder('Bình Hoa Gỗ Mỹ Nghệ'),
+  },
+  {
+    id: 10,
+    category: 'Trang Trí',
+    title: 'Khay Gỗ Trưng Bày',
+    description: 'Khay gỗ đa năng dùng cho bàn trà, trưng bày vật phẩm hoặc set quà thủ công.',
+    badge: 'Mới',
+    image: createPlaceholder('Khay Gỗ Trưng Bày'),
+  },
+  {
+    id: 11,
+    category: 'Tranh Gỗ',
+    title: 'Tranh Gỗ Phúc Lộc',
+    description: 'Bố cục chữ thư pháp kết hợp hoa văn truyền thống, phù hợp làm quà tặng tân gia.',
+    badge: 'Giới Hạn',
+    image: createPlaceholder('Tranh Gỗ Phúc Lộc'),
+  },
+  {
+    id: 12,
+    category: 'Trang Trí',
+    title: 'Đèn Gỗ Điêu Khắc',
+    description: 'Đèn gỗ tạo ánh sáng dịu nhẹ qua các đường chạm khắc, mang cảm giác ấm cúng cho phòng ngủ.',
+    badge: 'Thủ Công',
+    image: createPlaceholder('Đèn Gỗ Điêu Khắc'),
+  },
+]
+
+export default PRODUCTS
