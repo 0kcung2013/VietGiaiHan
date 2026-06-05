@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { useWindowScroll } from '@mantine/hooks'
 import { IconMenu2, IconX } from '@tabler/icons-react'
 import clsx from 'clsx'
@@ -8,14 +8,14 @@ import styles from './Navbar.module.css'
 const navLinks = [
   { label: 'Trang chủ', to: '/#hero' },
   { label: 'Giới thiệu', to: '/#about' },
-  { label: 'Tất Cả Sản Phẩm', to: '/san-pham' },
-  { label: 'Sản phẩm', to: '/#products' },
+  { label: 'Sản phẩm', to: '/san-pham' },
   { label: 'Quy trình', to: '/#process' },
   { label: 'Liên hệ', to: '/#contact' },
 ]
 
 export function Navbar() {
   const [scroll] = useWindowScroll()
+  const location = useLocation()
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const isScrolled = scroll.y > 0
 
@@ -48,6 +48,23 @@ export function Navbar() {
   }, [])
 
   const closeDrawer = () => setIsDrawerOpen(false)
+  const normalizePathname = (pathname: string) => (pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname)
+  const getIsActiveLink = (to: string) => {
+    const currentPathname = normalizePathname(location.pathname)
+
+    if (to === '/san-pham') {
+      return currentPathname === '/san-pham' || currentPathname.startsWith('/san-pham/')
+    }
+
+    const [pathname, hash = ''] = to.split('#')
+    const targetPathname = normalizePathname(pathname)
+
+    if (to === '/#hero') {
+      return currentPathname === targetPathname && (location.hash === `#${hash}` || location.hash === '')
+    }
+
+    return currentPathname === targetPathname && location.hash === `#${hash}`
+  }
 
   return (
     <header className={clsx(styles.navbar, isScrolled && styles.isScrolled)}>
@@ -58,15 +75,20 @@ export function Navbar() {
         </NavLink>
 
         <nav className={styles.desktopNav} aria-label="Điều hướng chính">
-          {navLinks.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              className={({ isActive }) => clsx(styles.navLink, isActive && styles.active)}
-            >
-              {link.label}
-            </NavLink>
-          ))}
+          {navLinks.map((link) => {
+            const isActiveLink = getIsActiveLink(link.to)
+
+            return (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                data-active={isActiveLink ? 'true' : undefined}
+                className={clsx(styles.navLink, isActiveLink && styles.active)}
+              >
+                {link.label}
+              </NavLink>
+            )
+          })}
         </nav>
 
         <NavLink to="/#contact" className={styles.cta}>
@@ -105,7 +127,8 @@ export function Navbar() {
                 <NavLink
                   key={link.to}
                   to={link.to}
-                  className={({ isActive }) => clsx(styles.mobileLink, isActive && styles.active)}
+                  data-active={getIsActiveLink(link.to) ? 'true' : undefined}
+                  className={() => `${styles.mobileLink} ${getIsActiveLink(link.to) ? styles.active : ''}`}
                   onClick={closeDrawer}
                 >
                   {link.label}
