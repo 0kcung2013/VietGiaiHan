@@ -89,11 +89,14 @@ export function ProductsSection() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
         >
-          <p className={styles.label}>Sản phẩm của chúng tôi</p>
-          <h2 className={styles.heading}>Tinh hoa từ gỗ tự nhiên</h2>
+          <p className={styles.label}>Sản phẩm nổi bật</p>
+          <h2 className={styles.heading}>Bộ sưu tập được tuyển chọn</h2>
           <p className={styles.sub}>
-            Mỗi sản phẩm được chế tác thủ công, mang đậm bản sắc văn hóa Việt.
+            Những thiết kế tiêu biểu cho chất liệu gỗ tự nhiên, đường nét thủ công và phong cách sống tinh tế.
           </p>
+          <a className={styles.viewAll} href="/san-pham">
+            Xem tất cả sản phẩm
+          </a>
         </motion.div>
 
         {isLoading ? <p className={styles.status}>Đang tải sản phẩm...</p> : null}

@@ -1,13 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:wght@400;700&display=swap');
-
 .section {
-  background: #f9f6f1;
-  padding: 6.5rem 0;
+  background: #f7efe3;
+  padding: var(--space-16) 0;
 }
 
 .inner {
   width: 100%;
-  max-width: 1000px;
+  max-width: 980px;
   margin: 0 auto;
   padding: 0 var(--container-pad);
 }
@@ -18,9 +16,11 @@
   grid-template-columns: minmax(280px, 40%) 1px minmax(0, 60%);
   align-items: stretch;
   overflow: hidden;
-  background: #f9f6f1;
-  color: #0f1c2e;
-  box-shadow: 0 28px 70px rgba(15, 28, 46, 0.12);
+  border: 1px solid rgba(201, 168, 76, 0.22);
+  border-radius: var(--radius-md);
+  background: #fffaf2;
+  color: var(--color-wood-900);
+  box-shadow: 0 18px 42px rgba(58, 32, 16, 0.08);
 }
 
 .card::before {
@@ -46,13 +46,13 @@
 
 .avatarCol {
   display: flex;
-  min-height: 560px;
+  min-height: 360px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
   padding: 3rem 2.5rem;
-  background: #0f1c2e;
+  background: #2b180c;
 }
 
 .monogram {
@@ -63,15 +63,15 @@
   border: 1px solid #c9a84c;
   border-radius: 50%;
   color: #c9a84c;
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-display);
   font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: 0.14em;
 }
 
 .avatarRing {
-  width: 220px;
-  height: 220px;
+  width: 170px;
+  height: 170px;
   aspect-ratio: 1;
   padding: 6px;
   border: 2px solid #c9a84c;
@@ -110,7 +110,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 4rem 4.5rem;
+  padding: var(--space-10);
 }
 
 .badge {
@@ -120,10 +120,10 @@
   min-height: 30px;
   margin-bottom: 1.35rem;
   padding: 0.5rem 0.9rem;
-  border-radius: 999px;
+  border-radius: var(--radius-sm);
   background: #c9a84c;
-  color: #0f1c2e;
-  font-family: 'Inter', sans-serif;
+  color: #2b180c;
+  font-family: var(--font-body);
   font-size: 0.66rem;
   font-weight: 500;
   line-height: 1;
@@ -138,8 +138,8 @@
 .name {
   max-width: 680px;
   margin: 0;
-  color: #0f1c2e;
-  font-family: 'Playfair Display', serif;
+  color: var(--color-wood-900);
+  font-family: var(--font-display);
   font-size: clamp(1.4rem, 3vw, 2.2rem);
   font-weight: 700;
   letter-spacing: -0.01em;
@@ -149,7 +149,7 @@
 
 .role,
 .infoLabel {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   text-transform: uppercase;
 }
 
@@ -163,7 +163,7 @@
 
 .infoLabel {
   margin-bottom: 1.15rem;
-  color: rgba(15, 28, 46, 0.62);
+  color: var(--color-text-muted);
   font-size: 0.68rem;
   font-weight: 500;
   letter-spacing: 0.18em;
@@ -184,8 +184,8 @@
   gap: 1rem;
   align-items: center;
   min-height: 38px;
-  color: #1a2e44;
-  font-family: 'Inter', sans-serif;
+  color: var(--color-wood-800);
+  font-family: var(--font-body);
   font-size: 0.85rem;
   font-weight: 500;
   letter-spacing: 0.08em;
@@ -225,8 +225,8 @@
 
 .address {
   margin: 0.45rem 0 0;
-  color: #4a5568;
-  font-family: 'Inter', sans-serif;
+  color: var(--color-text-secondary);
+  font-family: var(--font-body);
   font-size: 0.85rem;
   font-weight: 400;
   line-height: 1.8;

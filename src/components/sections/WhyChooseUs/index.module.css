@@ -1,0 +1,119 @@
+.section {
+  background: #fffaf2;
+  padding: var(--space-24) 0;
+}
+
+.inner {
+  width: 100%;
+  max-width: min(var(--container-max), 100vw);
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
+}
+
+.header {
+  max-width: 720px;
+  margin: 0 auto var(--space-12);
+  text-align: center;
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-4);
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.label::before,
+.label::after {
+  width: 24px;
+  height: 1px;
+  background: var(--color-gold);
+  content: '';
+}
+
+.heading {
+  margin: 0;
+  color: var(--color-wood-900);
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 4vw, 3.35rem);
+  font-weight: 500;
+  line-height: 1.08;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.card {
+  min-height: 250px;
+  padding: var(--space-6);
+  border: 1px solid rgba(201, 168, 76, 0.22);
+  border-radius: var(--radius-md);
+  background: #fdf7ed;
+  text-align: center;
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+}
+
+.card:hover {
+  border-color: rgba(184, 134, 11, 0.45);
+  box-shadow: var(--shadow-card);
+  transform: translateY(-6px);
+}
+
+.icon {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  margin: 0 auto var(--space-5);
+  place-items: center;
+  border: 1px solid rgba(184, 134, 11, 0.32);
+  border-radius: 50%;
+  background: rgba(201, 168, 76, 0.08);
+  color: #b8860b;
+}
+
+.card h3 {
+  margin: 0;
+  color: var(--color-wood-900);
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  line-height: 1.12;
+}
+
+.card p {
+  margin: var(--space-3) 0 0;
+  color: var(--color-text-secondary);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  line-height: 1.65;
+}
+
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .section {
+    padding: var(--space-16) 0;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    min-height: auto;
+  }
+}

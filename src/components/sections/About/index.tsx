@@ -42,12 +42,11 @@ export function About() {
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
         >
-          <p className={styles.label}>Giới thiệu</p>
-          <h2 className={styles.heading}>Nơi kỹ nghệ truyền thống gặp thẩm mỹ đương đại</h2>
+          <p className={styles.label}>Câu chuyện thương hiệu</p>
+          <h2 className={styles.heading}>Di sản nghề gỗ được gìn giữ bằng đôi tay người thợ</h2>
           <p className={styles.description}>
-            Việt Giai Hân sản xuất đồ gỗ mỹ nghệ thủ công cao cấp cho không gian sống,
-            quà tặng và các đơn hàng theo yêu cầu. Chúng tôi theo đuổi vẻ đẹp tiết chế:
-            vật liệu thật, đường nét rõ ràng và độ hoàn thiện bền theo thời gian.
+            Tại Việt Giai Hân, mỗi tác phẩm là kết tinh của tình yêu với gỗ và sự tôn vinh di sản thủ công truyền thống.
+            Chúng tôi tin vẻ đẹp thật đến từ chất liệu tự nhiên, tay nghề bền bỉ và những chi tiết được hoàn thiện để đồng hành lâu dài.
           </p>
 
           <div className={styles.stats}>
@@ -63,7 +62,7 @@ export function About() {
             <div className={styles.statDivider} />
             <div className={styles.stat}>
               <span className={styles.statNum}>100%</span>
-              <span className={styles.statLabel}>Thủ công</span>
+              <span className={styles.statLabel}>Tận tâm</span>
             </div>
           </div>
 
@@ -75,7 +74,7 @@ export function About() {
               <img src={aboutSecond} alt="Sản phẩm gỗ thủ công" className={styles.img} />
               <div className={styles.imageBadge}>
                 <span className={styles.badgeNumber}>10+</span>
-                <span className={styles.badgeText}>Năm kinh nghiệm</span>
+                <span className={styles.badgeText}>Năm gìn nghề</span>
               </div>
             </div>
           </div>

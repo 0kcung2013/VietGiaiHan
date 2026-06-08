@@ -1,11 +1,11 @@
 import styles from './index.module.css'
 
 const items = [
-  'Đồ gỗ mỹ nghệ',
+  'Tinh hoa gỗ Việt',
+  'Thủ công mỹ nghệ',
+  'Nghệ nhân gia truyền',
   'Chế tác thủ công',
   'Gỗ tự nhiên',
-  'Tre nứa truyền thống',
-  'Tinh hoa Việt Nam',
   'Sản xuất theo yêu cầu',
 ]
 

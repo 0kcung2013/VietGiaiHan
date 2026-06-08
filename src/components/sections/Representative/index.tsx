@@ -44,7 +44,7 @@ export function Representative() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            <div className={styles.badge}>NGƯỜI ĐẠI DIỆN</div>
+            <div className={styles.badge}>Thông tin doanh nghiệp</div>
             <div className={styles.nameWrap}>
               <h2 className={styles.name}>TRẦN HUỲNH THANH TÂM</h2>
               <div className={styles.role}>Đại diện pháp luật</div>

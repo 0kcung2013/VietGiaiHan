@@ -36,8 +36,8 @@ export function Contact() {
           transition={{ duration: 0.6 }}
         >
           <p className={styles.label}>Liên hệ</p>
-          <h2 className={styles.heading}>Hãy để chúng tôi phục vụ bạn</h2>
-          <p className={styles.sub}>Liên hệ để được tư vấn sản phẩm và báo giá chi tiết.</p>
+          <h2 className={styles.heading}>Bạn cần một sản phẩm gỗ được chế tác riêng?</h2>
+          <p className={styles.sub}>Gửi yêu cầu để được tư vấn chất liệu, kiểu dáng, kích thước và báo giá phù hợp.</p>
         </motion.div>
 
         <div className={styles.grid}>
@@ -106,7 +106,7 @@ export function Contact() {
             </label>
 
             <button className={styles.submit} type="submit">
-              Gửi yêu cầu
+              Gửi yêu cầu tư vấn
             </button>
           </motion.form>
         </div>

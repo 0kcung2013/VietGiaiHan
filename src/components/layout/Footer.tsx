@@ -14,17 +14,18 @@ export function Footer() {
         </div>
 
         <div className={styles.col}>
-          <div className={styles.colTitle}>Sản phẩm</div>
-          <a href="/#products">Đồ gỗ nội thất</a>
-          <a href="/#products">Đồ mỹ nghệ</a>
-          <a href="/#products">Đồ gia dụng</a>
+          <div className={styles.colTitle}>Liên kết nhanh</div>
+          <a href="/#about">Câu chuyện thương hiệu</a>
+          <a href="/#products">Sản phẩm nổi bật</a>
+          <a href="/#process">Quy trình chế tác</a>
         </div>
 
         <div className={styles.col}>
-          <div className={styles.colTitle}>Công ty</div>
-          <a href="/#about">Về chúng tôi</a>
-          <a href="/#process">Quy trình</a>
-          <a href="/#representative">Người đại diện</a>
+          <div className={styles.colTitle}>Danh mục</div>
+          <a href="/#categories">Nội thất trong nhà</a>
+          <a href="/#categories">Nghệ thuật trang trí</a>
+          <a href="/#categories">Đồ gia dụng</a>
+          <a href="/#categories">Sản phẩm từ tre</a>
         </div>
 
         <div className={styles.col}>
@@ -32,6 +33,7 @@ export function Footer() {
           <p>Tổ 3, KP Tân Hóa, P. Tân Khánh, TP.HCM</p>
           <p>0xxx xxx xxx</p>
           <p>info@vietgiaihan.vn</p>
+          <p>Thứ 2 - Thứ 7: 08:00 - 17:30</p>
         </div>
       </div>
 

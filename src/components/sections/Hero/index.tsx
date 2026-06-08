@@ -1,6 +1,6 @@
 import { useRef, type MouseEvent } from 'react'
 import { motion, useMotionValue, useSpring, useTransform, type Variants } from 'framer-motion'
-import { IconChevronDown } from '@tabler/icons-react'
+import { IconChevronDown, IconHammer, IconLeaf, IconShieldCheck } from '@tabler/icons-react'
 import heroWood from '../../../assets/images/hero-wood.jpg'
 import styles from './index.module.css'
 
@@ -58,6 +58,12 @@ const particles = Array.from({ length: 12 }, (_, i) => ({
   delay: i * 0.4,
 }))
 
+const trustBadges = [
+  { icon: IconShieldCheck, number: '10+', label: 'Năm kinh nghiệm' },
+  { icon: IconHammer, number: '500+', label: 'Sản phẩm hoàn thiện' },
+  { icon: IconLeaf, number: '100%', label: 'Thủ công' },
+]
+
 export function Hero() {
   const ref = useRef<HTMLDivElement>(null)
   const mouseX = useMotionValue(0)
@@ -109,13 +115,10 @@ export function Hero() {
           animate="visible"
         >
           <motion.p className={styles.label} variants={labelVariants}>
-            Thủ công từ gỗ tự nhiên
+            Việt Giai Hân studio
           </motion.p>
 
           <motion.h1 className={styles.heading} variants={headingVariants}>
-            <span className={styles.headingNumber} aria-hidden="true">
-              01
-            </span>
             <span className={styles.headingLines}>
               <span className={styles.headingLine1}>Nghệ thuật từ</span>
               <span className={styles.headingLine2}>gỗ Việt Nam</span>
@@ -123,17 +126,27 @@ export function Hero() {
           </motion.h1>
 
           <motion.p className={styles.description} variants={paragraphVariants}>
-            Việt Giai Hân chuyên sản xuất đồ gỗ mỹ nghệ cao cấp, từ đồ gia dụng đến trang trí
-            nội thất. Mỗi sản phẩm là một tác phẩm được chế tác tỉ mỉ từ gỗ tự nhiên chọn lọc.
+            Chúng tôi chế tác đồ gỗ mỹ nghệ, nội thất và vật dụng gia đình từ gỗ tự nhiên,
+            hoàn thiện thủ công theo yêu cầu để mỗi sản phẩm vừa bền, vừa mang dấu ấn riêng.
           </motion.p>
 
           <motion.div className={styles.actions} variants={buttonVariants}>
             <a className={styles.primaryButton} href="#products">
-              Xem sản phẩm →
+              Xem bộ sưu tập
             </a>
-            <a className={styles.ghostButton} href="#about">
-              Tìm hiểu thêm →
+            <a className={styles.ghostButton} href="#contact">
+              Nhận tư vấn
             </a>
+          </motion.div>
+
+          <motion.div className={styles.trustList} variants={buttonVariants}>
+            {trustBadges.map((badge) => (
+              <div className={styles.trustItem} key={badge.label}>
+                <badge.icon size={20} stroke={1.5} />
+                <span className={styles.trustNumber}>{badge.number}</span>
+                <span className={styles.trustLabel}>{badge.label}</span>
+              </div>
+            ))}
           </motion.div>
         </motion.div>
 
@@ -154,13 +167,9 @@ export function Hero() {
               className={styles.heroImage}
             />
           </div>
-          <div className={styles.statBadge} style={{ bottom: '20px', left: '16px' }}>
-            <span className={styles.statNumber}>10+</span>
-            <span className={styles.statLabel}>Năm kinh nghiệm</span>
-          </div>
-          <div className={styles.statBadge} style={{ top: '20px', right: '16px' }}>
-            <span className={styles.statNumber}>500+</span>
-            <span className={styles.statLabel}>Sản phẩm</span>
+          <div className={styles.imageCaption}>
+            <span>Xưởng chế tác thủ công</span>
+            <strong>Gỗ tự nhiên tuyển chọn</strong>
           </div>
         </motion.div>
       </div>
