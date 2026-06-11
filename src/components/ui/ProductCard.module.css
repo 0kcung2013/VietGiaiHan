@@ -24,7 +24,6 @@
   position: relative;
   display: flex;
   aspect-ratio: 1 / 0.9;
-  min-height: 250px;
   align-items: center;
   justify-content: center;
   overflow: hidden;
@@ -152,13 +151,13 @@
 
 @media (max-width: 1023px) {
   .imageWrap {
-    min-height: 220px;
+    aspect-ratio: 1 / 0.86;
   }
 }
 
 @media (max-width: 640px) {
   .imageWrap {
-    min-height: 210px;
+    aspect-ratio: 4 / 3;
     padding: var(--space-4);
   }
 

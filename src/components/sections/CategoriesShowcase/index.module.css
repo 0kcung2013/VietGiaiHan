@@ -12,9 +12,10 @@
 
 .inner {
   width: 100%;
-  max-width: min(var(--container-max), 100vw);
+  max-width: calc(1200px + (clamp(1rem, 5vw, 4rem) * 2));
   margin: 0 auto;
-  padding: 0 var(--container-pad);
+  padding: 0 clamp(1rem, 5vw, 4rem);
+  min-width: 0;
 }
 
 /* ── Header ─────────────────────────────────── */
@@ -75,42 +76,58 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(12px, 1.5vw, 20px);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: clamp(16px, 2vw, 24px);
+  width: 100%;
+  min-width: 0;
 }
 
 /* ── Card ───────────────────────────────────── */
 
 .card {
   position: relative;
+  min-width: 0;
+  width: 100%;
   overflow: hidden;
   border-radius: var(--radius-lg);
-  background: var(--color-wood-800);
+  background: #2b180c;
   aspect-ratio: 3 / 4;
   cursor: pointer;
 }
 
-.image {
+.imageWrap {
   position: absolute;
   inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: inherit;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 46%, rgba(234, 212, 154, 0.16) 0 24%, transparent 58%),
+    #2b180c;
+}
+
+.image {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   transition: transform 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .overlay {
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: linear-gradient(
     180deg,
-    rgba(20, 10, 4, 0.0) 0%,
+    rgba(20, 10, 4, 0) 0%,
     rgba(20, 10, 4, 0.25) 40%,
     rgba(20, 10, 4, 0.78) 100%
   );
   transition: opacity 500ms ease;
-  z-index: 1;
 }
 
 /* ── Card Content ───────────────────────────── */
@@ -210,7 +227,7 @@
 
 @media (max-width: 1024px) {
   .grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: clamp(10px, 1.4vw, 16px);
   }
 
@@ -229,7 +246,7 @@
 
 /* ── Responsive: Mobile ─────────────────────── */
 
-@media (max-width: 760px) {
+@media (max-width: 640px) {
   .header {
     max-width: none;
     margin-bottom: clamp(1.5rem, 4vw, 2rem);
@@ -250,12 +267,25 @@
   }
 
   .card {
-    aspect-ratio: unset;
-    height: clamp(220px, 65vw, 320px);
+    aspect-ratio: 16 / 10;
+  }
+
+  .image {
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(20, 10, 4, 0) 0%,
+      rgba(20, 10, 4, 0.12) 46%,
+      rgba(20, 10, 4, 0.72) 100%
+    );
   }
 
   .content {
-    padding: 16px;
+    padding: clamp(14px, 4vw, 16px);
   }
 
   .content h3 {
@@ -271,7 +301,7 @@
 
 @media (max-width: 480px) {
   .card {
-    height: clamp(200px, 60vw, 280px);
+    aspect-ratio: 4 / 3;
   }
 
   .label::before,

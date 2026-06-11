@@ -28,13 +28,20 @@ interface ProductApiResponse {
   CategorySlug?: string
   imageUrl?: string
   ImageUrl?: string
+  image?: string
+  Image?: string
+  thumbnail?: string
+  Thumbnail?: string
   isFeatured: boolean
   sortOrder: number
   status: string
   createdAt: string
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5000/api'
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5000/api').replace(
+  /\/$/,
+  '',
+)
 
 async function request<T>(path: string): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`)
@@ -68,6 +75,13 @@ function normalizeProduct(product: ProductApiResponse): Product {
     categoryId: product.categoryId ?? product.CategoryId ?? null,
     categoryName: product.categoryName ?? product.CategoryName ?? product.category,
     categorySlug: product.categorySlug ?? product.CategorySlug ?? '',
-    imageUrl: product.imageUrl ?? product.ImageUrl ?? '',
+    imageUrl:
+      product.imageUrl ??
+      product.ImageUrl ??
+      product.image ??
+      product.Image ??
+      product.thumbnail ??
+      product.Thumbnail ??
+      '',
   }
 }

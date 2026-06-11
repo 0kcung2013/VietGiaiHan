@@ -53,13 +53,15 @@ export function CategoriesShowcase() {
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.5, delay: index * 0.08 }}
             >
-              <img
-                src={category.image}
-                alt={category.title}
-                className={styles.image}
-                loading="lazy"
-              />
-              <div className={styles.overlay} />
+              <div className={styles.imageWrap}>
+                <img
+                  src={category.image}
+                  alt={category.title}
+                  className={styles.image}
+                  loading="lazy"
+                />
+                <div className={styles.overlay} />
+              </div>
               <div className={styles.content}>
                 <span className={styles.cardNumber}>
                   {String(index + 1).padStart(2, '0')}

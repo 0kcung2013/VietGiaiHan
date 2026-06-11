@@ -5,7 +5,7 @@
 
 .inner {
   width: 100%;
-  max-width: 980px;
+  max-width: min(980px, 100vw);
   margin: 0 auto;
   padding: 0 var(--container-pad);
 }
@@ -13,7 +13,7 @@
 .card {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(280px, 40%) 1px minmax(0, 60%);
+  grid-template-columns: minmax(240px, 40%) 1px minmax(0, 60%);
   align-items: stretch;
   overflow: hidden;
   border: 1px solid rgba(201, 168, 76, 0.22);
@@ -46,7 +46,7 @@
 
 .avatarCol {
   display: flex;
-  min-height: 360px;
+  min-height: clamp(300px, 34vw, 360px);
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -70,8 +70,8 @@
 }
 
 .avatarRing {
-  width: 170px;
-  height: 170px;
+  width: clamp(140px, 16vw, 170px);
+  max-width: 100%;
   aspect-ratio: 1;
   padding: 6px;
   border: 2px solid #c9a84c;
@@ -271,8 +271,7 @@
   }
 
   .avatarRing {
-    width: 180px;
-    height: 180px;
+    width: min(180px, 58vw);
   }
 
   .divider {

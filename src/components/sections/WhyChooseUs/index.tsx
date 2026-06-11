@@ -30,38 +30,82 @@ const reasons = [
   },
 ]
 
+const cardVariants = [
+  styles.cardAmber,
+  styles.cardBronze,
+  styles.cardGold,
+  styles.cardOlive,
+  styles.cardSage,
+]
+
 export function WhyChooseUs() {
   return (
     <section className={styles.section} id="why">
       <div className={styles.inner}>
-        <motion.div
-          className={styles.header}
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.25 }}
-          transition={{ duration: 0.55 }}
-        >
-          <p className={styles.label}>Vì sao chọn chúng tôi</p>
-          <h2 className={styles.heading}>Giữ chất thủ công trong từng chi tiết hoàn thiện</h2>
-        </motion.div>
+        <div className={styles.split}>
+          <motion.div
+            className={styles.intro}
+            initial={{ opacity: 0, x: -24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.55 }}
+          >
+            <span className={styles.giantNum} aria-hidden="true">01</span>
+            <p className={styles.label}>Vì sao chọn chúng tôi</p>
+            <h2 className={styles.heading}>Giữ chất <span className={styles.headingAccent}>thủ công</span> trong từng chi tiết hoàn thiện</h2>
+            <p className={styles.introText}>
+              Từ vật liệu tự nhiên đến bàn tay thợ lành nghề, mỗi sản phẩm là kết quả
+              của quy trình tỉ mỉ, không chạy theo số lượng mà đặt giá trị bền lâu lên hàng đầu.
+            </p>
+            <a href="#process" className={styles.ctaLink}>
+              Tìm hiểu quy trình
+              <span className={styles.ctaArrow} aria-hidden="true">→</span>
+            </a>
+            <span className={styles.introAccent} />
+          </motion.div>
 
-        <div className={styles.grid}>
-          {reasons.map((reason, index) => (
+          <div className={styles.cardGrid}>
+            {reasons.map((reason, index) => (
+              <motion.article
+                className={`${styles.card} ${cardVariants[index]}`}
+                key={reason.title}
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.5, delay: index * 0.06 }}
+              >
+                <div className={styles.cardInner}>
+                  <div className={styles.icon}>
+                    <reason.icon size={26} stroke={1.4} />
+                  </div>
+                  <div className={styles.cardBody}>
+                    <span className={styles.cardNum}>
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <h3>{reason.title}</h3>
+                    <p>{reason.text}</p>
+                  </div>
+                </div>
+              </motion.article>
+            ))}
+
             <motion.article
-              className={styles.card}
-              key={reason.title}
+              className={`${styles.card} ${styles.ctaCard}`}
               initial={{ opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.25 }}
-              transition={{ duration: 0.5, delay: index * 0.05 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.5, delay: reasons.length * 0.06 }}
             >
-              <div className={styles.icon}>
-                <reason.icon size={28} stroke={1.4} />
+              <div className={styles.ctaCardInner}>
+                <span className={styles.ctaCardLabel}>Tư vấn & thiết kế</span>
+                <h3>Tư vấn chất liệu & thiết kế riêng</h3>
+                <a href="#contact" className={styles.ctaCardLink}>
+                  Liên hệ ngay
+                  <span aria-hidden="true">→</span>
+                </a>
               </div>
-              <h3>{reason.title}</h3>
-              <p>{reason.text}</p>
             </motion.article>
-          ))}
+          </div>
         </div>
       </div>
     </section>

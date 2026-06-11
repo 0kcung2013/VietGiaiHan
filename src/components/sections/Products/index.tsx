@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion, type Variants } from 'framer-motion'
 import { ProductCard, type ProductCardProps } from '../../ui/ProductCard'
-import { getFeaturedProducts, type Product } from '../../../services/productService'
+import { getFeaturedProducts, getProducts, type Product } from '../../../services/productService'
 import { fallbackProducts } from '../../../data/productFallbacks'
 import styles from './index.module.css'
 
@@ -51,14 +51,39 @@ export function ProductsSection() {
   useEffect(() => {
     let isMounted = true
 
-    getFeaturedProducts()
-      .then((items) => {
+    async function loadProducts() {
+      const featuredProducts = await getFeaturedProducts()
+
+      if (featuredProducts.length > 0) {
+        return {
+          products: featuredProducts.map(mapProductToCard),
+          message: null,
+        }
+      }
+
+      const allProducts = await getProducts()
+
+      if (allProducts.length > 0) {
+        return {
+          products: allProducts.map(mapProductToCard),
+          message: 'Chưa có sản phẩm nổi bật. Đang hiển thị toàn bộ sản phẩm.',
+        }
+      }
+
+      return {
+        products: fallbackProducts,
+        message: 'Chưa có sản phẩm từ API. Đang hiển thị dữ liệu mẫu.',
+      }
+    }
+
+    loadProducts()
+      .then((result) => {
         if (!isMounted) {
           return
         }
 
-        setProducts(items.map(mapProductToCard))
-        setErrorMessage(null)
+        setProducts(result.products)
+        setErrorMessage(result.message)
       })
       .catch(() => {
         if (!isMounted) {

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("VietGiaiHan.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b6e620f71f42e7c1f60d8b1c65482c0771ca9f12")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3d510a864a4b88493dd0a8675130476060237082")]
 [assembly: System.Reflection.AssemblyProductAttribute("VietGiaiHan.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("VietGiaiHan.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

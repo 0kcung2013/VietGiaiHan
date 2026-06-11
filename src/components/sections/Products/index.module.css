@@ -89,9 +89,9 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   align-items: stretch;
-  gap: var(--space-6);
+  gap: clamp(18px, 2vw, 24px);
   max-width: 1080px;
   margin-top: var(--space-12);
   margin-right: auto;
