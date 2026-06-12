@@ -2,14 +2,30 @@
   display: flex;
   min-height: 100dvh;
   background:
-    radial-gradient(circle at top left, rgba(200, 155, 60, 0.08), transparent 28rem),
-    linear-gradient(135deg, #fffaf2 0%, #fbf3e8 100%);
+    radial-gradient(circle at 18% 8%, rgba(200, 155, 60, 0.13), transparent 24rem),
+    radial-gradient(circle at 82% 18%, rgba(72, 41, 25, 0.08), transparent 28rem),
+    linear-gradient(135deg, #fffaf5 0%, #f8efe1 42%, #f3e4ce 100%);
   color: var(--color-text-primary);
 }
 
+.layout::before {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  content: '';
+  background-image:
+    linear-gradient(rgba(72, 41, 25, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(72, 41, 25, 0.025) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent 70%);
+}
+
 .main {
+  position: relative;
+  z-index: 1;
   flex: 1;
-  margin-left: 248px;
+  margin-left: 264px;
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
@@ -19,8 +35,8 @@
 .content {
   flex: 1;
   width: 100%;
-  max-width: 1280px;
-  padding: var(--space-8) var(--space-10);
+  max-width: 1360px;
+  padding: var(--space-8) clamp(var(--space-5), 3vw, var(--space-10)) var(--space-12);
   margin: 0 auto;
 }
 
@@ -33,5 +49,11 @@
 @media (max-width: 768px) {
   .content {
     padding: var(--space-4);
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: var(--space-3);
   }
 }

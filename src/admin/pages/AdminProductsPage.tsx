@@ -228,14 +228,16 @@ export function AdminProductsPage() {
             <tbody>
               {filteredProducts.map((product) => (
                 <tr key={product.id}>
-                  <td>
+                  <td data-label="Sản phẩm">
                     <div className={styles.primaryStack}>
                       <div className={styles.nameCell}>{product.name}</div>
                       <div className={styles.mutedCell}>{product.slug}</div>
                     </div>
                   </td>
-                  <td className={styles.secondaryCell}>{product.categoryName || product.category}</td>
-                  <td>
+                  <td className={styles.secondaryCell} data-label="Danh mục">
+                    {product.categoryName || product.category}
+                  </td>
+                  <td data-label="Trạng thái">
                     <span
                       className={`${styles.badge} ${
                         product.status === 'Active' ? styles.activeBadge : styles.inactiveBadge
@@ -244,16 +246,16 @@ export function AdminProductsPage() {
                       {product.status === 'Active' ? 'Đang hiển thị' : 'Tạm ẩn'}
                     </span>
                   </td>
-                  <td>
+                  <td data-label="Nổi bật">
                     {product.isFeatured ? (
                       <span className={`${styles.badge} ${styles.featuredBadge}`}>Nổi bật</span>
                     ) : (
                       <span className={styles.mutedCell}>Không</span>
                     )}
                   </td>
-                  <td className={styles.numericCell}>{product.sortOrder}</td>
-                  <td className={styles.descriptionCell}>{product.description}</td>
-                  <td>
+                  <td className={styles.numericCell} data-label="Thứ tự">{product.sortOrder}</td>
+                  <td className={styles.descriptionCell} data-label="Mô tả">{product.description}</td>
+                  <td data-label="Thao tác">
                     <div className={styles.actions}>
                       <button
                         className={`${styles.button} ${styles.actionPrimary}`}

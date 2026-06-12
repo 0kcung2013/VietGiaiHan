@@ -1,7 +1,7 @@
 .header {
-  min-height: 70px;
-  background: rgba(255, 250, 242, 0.9);
-  border-bottom: 1px solid rgba(234, 223, 206, 0.62);
+  min-height: 76px;
+  background: rgba(255, 250, 242, 0.76);
+  border-bottom: 1px solid rgba(234, 223, 206, 0.74);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -10,7 +10,8 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  backdrop-filter: blur(18px);
+  box-shadow: 0 16px 40px rgba(58, 32, 16, 0.045);
+  backdrop-filter: blur(22px);
 }
 
 .headerLeft {
@@ -22,8 +23,8 @@
 
 .menuBtn {
   display: none;
-  background: #fffaf2;
-  border: 1px solid var(--color-border);
+  background: rgba(255, 253, 248, 0.92);
+  border: 1px solid rgba(72, 41, 25, 0.12);
   color: var(--color-text-primary);
   cursor: pointer;
   padding: var(--space-2);
@@ -40,7 +41,7 @@
 
 .title {
   font-family: var(--font-display);
-  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+  font-size: clamp(1.45rem, 2.2vw, 1.9rem);
   font-weight: 700;
   color: var(--color-text-primary);
   line-height: 1;
@@ -60,12 +61,13 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  min-height: 36px;
+  min-height: 38px;
   padding: 0 var(--space-3);
   color: var(--color-text-secondary);
   text-decoration: none;
   font-size: var(--text-sm);
   font-weight: 600;
+  border: 1px solid transparent;
   border-radius: 999px;
   transition:
     transform 0.3s cubic-bezier(0.32, 0.72, 0, 1),
@@ -84,11 +86,11 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  min-height: 36px;
+  min-height: 38px;
   padding: 0 var(--space-3);
   border: 1px solid rgba(72, 41, 25, 0.16);
   border-radius: 999px;
-  background: #fffaf2;
+  background: rgba(255, 253, 248, 0.82);
   color: var(--color-text-secondary);
   font-family: var(--font-body);
   font-size: var(--text-sm);
@@ -131,5 +133,37 @@
   .headerRight {
     width: 100%;
     justify-content: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    gap: var(--space-3);
+    padding: var(--space-3);
+  }
+
+  .headerLeft {
+    width: 100%;
+  }
+
+  .title {
+    min-width: 0;
+    font-size: 1.2rem;
+    line-height: 1.15;
+  }
+
+  .headerRight {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+  }
+
+  .siteLink,
+  .logoutBtn {
+    justify-content: center;
+    width: 100%;
+    min-height: 38px;
+    padding: 0 var(--space-2);
+    font-size: var(--text-xs);
   }
 }

@@ -1,33 +1,34 @@
 .sidebar {
-  width: 248px;
+  width: 264px;
   min-height: 100dvh;
   background:
-    linear-gradient(145deg, rgba(234, 212, 154, 0.055), transparent 22rem),
-    linear-gradient(180deg, #3d2113 0%, #28160d 100%);
+    radial-gradient(circle at 30% 0%, rgba(234, 212, 154, 0.12), transparent 16rem),
+    linear-gradient(180deg, #3b2114 0%, #28150c 54%, #1f110a 100%);
   display: flex;
   flex-direction: column;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 100;
-  padding: var(--space-3);
-  border-right: 1px solid rgba(234, 212, 154, 0.1);
-  box-shadow: none;
+  padding: var(--space-4) var(--space-3);
+  border-right: 1px solid rgba(234, 212, 154, 0.14);
+  box-shadow: 18px 0 46px rgba(58, 32, 16, 0.18);
   transition: transform 0.55s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 .logo {
   padding: var(--space-4);
-  border: 1px solid transparent;
-  border-radius: 14px;
-  background: transparent;
+  border: 1px solid rgba(234, 212, 154, 0.14);
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(255, 250, 242, 0.08), rgba(255, 250, 242, 0.025));
   text-decoration: none;
   display: block;
 }
 
 .logoText {
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #fff7e7;
   display: block;
@@ -37,7 +38,7 @@
 .logoSub {
   font-family: var(--font-body);
   font-size: var(--text-xs);
-  color: rgba(255, 250, 242, 0.48);
+  color: rgba(255, 250, 242, 0.54);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   display: block;
@@ -46,7 +47,7 @@
 
 .nav {
   flex: 1;
-  padding: var(--space-5) 0;
+  padding: var(--space-6) 0;
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
@@ -55,7 +56,7 @@
 .navSection {
   padding: 0 var(--space-3) var(--space-1);
   font-size: var(--text-xs);
-  color: rgba(255, 250, 242, 0.36);
+  color: rgba(255, 250, 242, 0.38);
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-weight: 600;
@@ -65,8 +66,8 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: 0.7rem var(--space-3);
-  color: rgba(255, 250, 242, 0.68);
+  padding: 0.78rem var(--space-3);
+  color: rgba(255, 250, 242, 0.72);
   text-decoration: none;
   font-size: var(--text-sm);
   font-weight: 550;
@@ -75,20 +76,23 @@
     background 0.35s cubic-bezier(0.32, 0.72, 0, 1),
     color 0.35s cubic-bezier(0.32, 0.72, 0, 1);
   border: 1px solid transparent;
-  border-radius: 10px;
+  border-radius: 13px;
 }
 
 .navLink:hover {
   color: #fffaf2;
-  background: rgba(255, 250, 242, 0.06);
-  transform: translateX(2px);
+  background: rgba(255, 250, 242, 0.075);
+  transform: translateX(3px);
 }
 
 .navLinkActive {
   color: #fffaf2;
-  background: rgba(255, 250, 242, 0.1);
-  border-color: rgba(234, 212, 154, 0.12);
-  box-shadow: inset 2px 0 0 var(--color-gold);
+  background:
+    linear-gradient(135deg, rgba(200, 155, 60, 0.22), rgba(255, 250, 242, 0.08));
+  border-color: rgba(234, 212, 154, 0.2);
+  box-shadow:
+    inset 2px 0 0 var(--color-gold),
+    0 12px 28px rgba(0, 0, 0, 0.12);
 }
 
 .navIcon {
@@ -109,7 +113,7 @@
   text-decoration: none;
   font-size: var(--text-sm);
   border: 1px solid transparent;
-  border-radius: 10px;
+  border-radius: 13px;
   transition:
     color 0.35s cubic-bezier(0.32, 0.72, 0, 1),
     background 0.35s cubic-bezier(0.32, 0.72, 0, 1);
@@ -146,6 +150,6 @@
 
 @media (max-width: 480px) {
   .sidebar {
-    width: min(88vw, 248px);
+    width: min(88vw, 264px);
   }
 }

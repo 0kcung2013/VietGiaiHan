@@ -193,23 +193,23 @@ export function ConsultationRequestsPage() {
 
                 return (
                   <tr key={item.id}>
-                    <td>{index + 1}</td>
-                    <td className={styles.customerCell}>
+                    <td data-label="#">#{index + 1}</td>
+                    <td className={styles.customerCell} data-label="Khách hàng">
                       <div className={styles.customerName}>{item.fullName}</div>
                       <div className={styles.customerMeta}>{item.phone}</div>
                     </td>
-                    <td className={styles.phoneCell}>{item.phone}</td>
-                    <td className={styles.productCell}>{item.productName || '-'}</td>
-                    <td className={styles.messageCell} title={item.message || ''}>
+                    <td className={styles.phoneCell} data-label="Điện thoại">{item.phone}</td>
+                    <td className={styles.productCell} data-label="Sản phẩm">{item.productName || '-'}</td>
+                    <td className={styles.messageCell} data-label="Nội dung" title={item.message || ''}>
                       {item.message || '-'}
                     </td>
-                    <td>
+                    <td data-label="Trạng thái">
                       <span className={`${styles.statusBadge} ${badge.className}`}>
                         {badge.label}
                       </span>
                     </td>
-                    <td className={styles.dateCell}>{formatDate(item.createdAt)}</td>
-                    <td>
+                    <td className={styles.dateCell} data-label="Ngày tạo">{formatDate(item.createdAt)}</td>
+                    <td data-label="Thao tác">
                       <button
                         className={styles.actionBtn}
                         type="button"

@@ -153,9 +153,9 @@ export function AdminCategoriesPage() {
             <tbody>
               {categories.map((category) => (
                 <tr key={category.id}>
-                  <td className={styles.nameCell}>{category.name}</td>
-                  <td className={styles.mutedCell}>{category.slug}</td>
-                  <td>
+                  <td className={styles.nameCell} data-label="Danh mục">{category.name}</td>
+                  <td className={styles.mutedCell} data-label="Đường dẫn">{category.slug}</td>
+                  <td data-label="Trạng thái">
                     <span
                       className={`${styles.badge} ${
                         category.status === 'Active' ? styles.activeBadge : styles.inactiveBadge
@@ -164,9 +164,9 @@ export function AdminCategoriesPage() {
                       {category.status === 'Active' ? 'Đang hiển thị' : 'Tạm ẩn'}
                     </span>
                   </td>
-                  <td className={styles.numericCell}>{category.sortOrder}</td>
-                  <td className={styles.descriptionCell}>{category.description}</td>
-                  <td>
+                  <td className={styles.numericCell} data-label="Thứ tự">{category.sortOrder}</td>
+                  <td className={styles.descriptionCell} data-label="Mô tả">{category.description}</td>
+                  <td data-label="Thao tác">
                     <div className={styles.actions}>
                       <button
                         className={`${styles.button} ${styles.actionPrimary}`}
