@@ -3,9 +3,13 @@ import { Route, Routes, useLocation } from 'react-router-dom'
 import { LandingPage } from './pages/LandingPage'
 import { ProductDetailPage } from './pages/ProductDetailPage'
 import SanPham from './pages/SanPham.jsx'
+import { RequireAdminAuth } from './admin/components/RequireAdminAuth'
 import { AdminLayout } from './admin/components/AdminLayout'
+import { AdminLoginPage } from './admin/pages/AdminLoginPage'
 import { AdminDashboardPage } from './admin/pages/AdminDashboardPage'
 import { ConsultationRequestsPage } from './admin/pages/ConsultationRequestsPage'
+import { AdminProductsPage } from './admin/pages/AdminProductsPage'
+import { AdminCategoriesPage } from './admin/pages/AdminCategoriesPage'
 
 function ScrollToHash() {
   const location = useLocation()
@@ -34,10 +38,15 @@ function App() {
         <Route path="/san-pham" element={<SanPham />} />
         <Route path="/san-pham/:slug" element={<ProductDetailPage />} />
 
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminDashboardPage />} />
-          <Route path="dashboard" element={<AdminDashboardPage />} />
-          <Route path="consultations" element={<ConsultationRequestsPage />} />
+        <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route element={<RequireAdminAuth />}>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboardPage />} />
+            <Route path="dashboard" element={<AdminDashboardPage />} />
+            <Route path="consultations" element={<ConsultationRequestsPage />} />
+            <Route path="products" element={<AdminProductsPage />} />
+            <Route path="categories" element={<AdminCategoriesPage />} />
+          </Route>
         </Route>
       </Routes>
     </>

@@ -1,20 +1,16 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  IconPackage,
   IconFolder,
   IconMessageDots,
   IconMessageReport,
+  IconPackage,
+  IconPhoneCall,
+  IconRosetteDiscountCheck,
 } from '@tabler/icons-react'
+import { getAdminSummary, type AdminSummary } from '../services/adminSummaryService'
 import { getConsultationRequests, type ConsultationRequest } from '../services/adminConsultationService'
 import styles from './AdminDashboardPage.module.css'
-
-interface Stats {
-  totalProducts: number
-  totalCategories: number
-  newConsultations: number
-  totalConsultations: number
-}
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('vi-VN', {
@@ -26,60 +22,87 @@ function formatDate(dateStr: string) {
 
 function getStatusClass(status: string) {
   switch (status) {
-    case 'new': return styles.statusNew
-    case 'contacted': return styles.statusContacted
-    case 'completed': return styles.statusCompleted
-    case 'cancelled': return styles.statusCancelled
-    default: return styles.statusNew
+    case 'new':
+      return styles.statusNew
+    case 'contacted':
+      return styles.statusContacted
+    case 'completed':
+      return styles.statusCompleted
+    case 'cancelled':
+      return styles.statusCancelled
+    default:
+      return styles.statusNew
   }
 }
 
 function getStatusLabel(status: string) {
   switch (status) {
-    case 'new': return 'Mới'
-    case 'contacted': return 'Đã liên hệ'
-    case 'completed': return 'Hoàn tất'
-    case 'cancelled': return 'Hủy'
-    default: return status
+    case 'new':
+      return 'Mới'
+    case 'contacted':
+      return 'Đã liên hệ'
+    case 'completed':
+      return 'Hoàn tất'
+    case 'cancelled':
+      return 'Đã hủy'
+    default:
+      return status
   }
 }
 
+const emptySummary: AdminSummary = {
+  totalProducts: 0,
+  totalCategories: 0,
+  totalConsultationRequests: 0,
+  newConsultationRequests: 0,
+  contactedConsultationRequests: 0,
+  completedConsultationRequests: 0,
+}
+
 export function AdminDashboardPage() {
-  const [stats, setStats] = useState<Stats>({
-    totalProducts: 0,
-    totalCategories: 0,
-    newConsultations: 0,
-    totalConsultations: 0,
-  })
+  const [summary, setSummary] = useState<AdminSummary>(emptySummary)
   const [recentConsultations, setRecentConsultations] = useState<ConsultationRequest[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
   useEffect(() => {
-    async function fetchStats() {
+    let cancelled = false
+
+    async function loadDashboard() {
       try {
-        const consultations = await getConsultationRequests()
-        const newCount = consultations.filter((c) => c.status === 'new').length
+        const [summaryData, consultations] = await Promise.all([
+          getAdminSummary(),
+          getConsultationRequests(),
+        ])
 
-        setStats({
-          totalProducts: 0,
-          totalCategories: 0,
-          newConsultations: newCount,
-          totalConsultations: consultations.length,
-        })
-
-        setRecentConsultations(consultations.slice(0, 5))
+        if (!cancelled) {
+          setSummary(summaryData)
+          setRecentConsultations(consultations.slice(0, 5))
+        }
       } catch {
-        console.error('Failed to load stats')
+        if (!cancelled) {
+          setError('Không thể tải dữ liệu tổng quan.')
+        }
       } finally {
-        setLoading(false)
+        if (!cancelled) {
+          setLoading(false)
+        }
       }
     }
 
-    fetchStats()
+    loadDashboard()
+
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   if (loading) {
-    return <div className={styles.loading}>Đang tải dữ liệu...</div>
+    return <div className={styles.loading}>Đang tải tổng quan...</div>
+  }
+
+  if (error) {
+    return <div className={styles.empty}>{error}</div>
   }
 
   return (
@@ -91,7 +114,27 @@ export function AdminDashboardPage() {
           </div>
           <div className={styles.statInfo}>
             <div className={styles.statLabel}>Yêu cầu mới</div>
-            <div className={styles.statValue}>{stats.newConsultations}</div>
+            <div className={styles.statValue}>{summary.newConsultationRequests}</div>
+          </div>
+        </div>
+
+        <div className={styles.statCard}>
+          <div className={`${styles.statIcon} ${styles.iconBlue}`}>
+            <IconPhoneCall size={24} stroke={1.5} />
+          </div>
+          <div className={styles.statInfo}>
+            <div className={styles.statLabel}>Đã liên hệ</div>
+            <div className={styles.statValue}>{summary.contactedConsultationRequests}</div>
+          </div>
+        </div>
+
+        <div className={styles.statCard}>
+          <div className={`${styles.statIcon} ${styles.iconGreen}`}>
+            <IconRosetteDiscountCheck size={24} stroke={1.5} />
+          </div>
+          <div className={styles.statInfo}>
+            <div className={styles.statLabel}>Đã hoàn tất</div>
+            <div className={styles.statValue}>{summary.completedConsultationRequests}</div>
           </div>
         </div>
 
@@ -101,7 +144,7 @@ export function AdminDashboardPage() {
           </div>
           <div className={styles.statInfo}>
             <div className={styles.statLabel}>Tổng yêu cầu</div>
-            <div className={styles.statValue}>{stats.totalConsultations}</div>
+            <div className={styles.statValue}>{summary.totalConsultationRequests}</div>
           </div>
         </div>
 
@@ -111,7 +154,7 @@ export function AdminDashboardPage() {
           </div>
           <div className={styles.statInfo}>
             <div className={styles.statLabel}>Sản phẩm</div>
-            <div className={styles.statValue}>{stats.totalProducts}</div>
+            <div className={styles.statValue}>{summary.totalProducts}</div>
           </div>
         </div>
 
@@ -121,7 +164,7 @@ export function AdminDashboardPage() {
           </div>
           <div className={styles.statInfo}>
             <div className={styles.statLabel}>Danh mục</div>
-            <div className={styles.statValue}>{stats.totalCategories}</div>
+            <div className={styles.statValue}>{summary.totalCategories}</div>
           </div>
         </div>
       </div>
@@ -129,7 +172,7 @@ export function AdminDashboardPage() {
       <div className={styles.section}>
         <div className={styles.sectionTitle}>Yêu cầu tư vấn gần đây</div>
         {recentConsultations.length === 0 ? (
-          <div className={styles.empty}>Chưa có yêu cầu tư vấn nào</div>
+          <div className={styles.empty}>Chưa có yêu cầu tư vấn.</div>
         ) : (
           <div className={styles.recentList}>
             {recentConsultations.map((item) => (
@@ -137,10 +180,10 @@ export function AdminDashboardPage() {
                 <div>
                   <div className={styles.recentName}>{item.fullName}</div>
                   <div className={styles.recentProduct}>
-                    {item.productName || 'Không có sản phẩm'}
+                    {item.productName || 'Chưa chọn sản phẩm'}
                   </div>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+                <div className={styles.recentMeta}>
                   <span className={`${styles.statusBadge} ${getStatusClass(item.status)}`}>
                     {getStatusLabel(item.status)}
                   </span>
@@ -151,19 +194,8 @@ export function AdminDashboardPage() {
           </div>
         )}
         {recentConsultations.length > 0 && (
-          <Link
-            to="/admin/consultations"
-            style={{
-              display: 'block',
-              textAlign: 'center',
-              marginTop: 'var(--space-4)',
-              color: 'var(--color-gold)',
-              fontSize: 'var(--text-sm)',
-              fontWeight: 500,
-              textDecoration: 'none',
-            }}
-          >
-            Xem tất cả →
+          <Link to="/admin/consultations" className={styles.viewAll}>
+            Xem tất cả
           </Link>
         )}
       </div>

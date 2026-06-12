@@ -1,9 +1,11 @@
 import { NavLink } from 'react-router-dom'
 import {
-  IconLayoutDashboard,
-  IconMessageDots,
   IconArrowLeft,
+  IconFolder,
+  IconLayoutDashboard,
   IconMenu2,
+  IconMessageDots,
+  IconPackage,
 } from '@tabler/icons-react'
 import clsx from 'clsx'
 import styles from './AdminSidebar.module.css'
@@ -15,15 +17,17 @@ interface AdminSidebarProps {
 
 const navItems = [
   {
-    section: 'Tổng quan',
+    section: 'Điều hành',
     items: [
-      { label: 'Dashboard', to: '/admin/dashboard', icon: IconLayoutDashboard },
+      { label: 'Tổng quan', to: '/admin/dashboard', icon: IconLayoutDashboard },
     ],
   },
   {
-    section: 'Quản lý',
+    section: 'Quản lý nội dung',
     items: [
       { label: 'Yêu cầu tư vấn', to: '/admin/consultations', icon: IconMessageDots },
+      { label: 'Sản phẩm', to: '/admin/products', icon: IconPackage },
+      { label: 'Danh mục', to: '/admin/categories', icon: IconFolder },
     ],
   },
 ]
@@ -35,8 +39,8 @@ export function AdminSidebar({ isOpen, onToggle }: AdminSidebarProps) {
 
       <aside className={clsx(styles.sidebar, isOpen && styles.sidebarOpen)}>
         <NavLink to="/admin/dashboard" className={styles.logo}>
-          <span className={styles.logoText}>Việt Giai Hân</span>
-          <span className={styles.logoSub}>Quản trị hệ thống</span>
+          <span className={styles.logoText}>Viet Giai Han</span>
+          <span className={styles.logoSub}>Hệ thống quản trị</span>
         </NavLink>
 
         <nav className={styles.nav}>
@@ -61,7 +65,7 @@ export function AdminSidebar({ isOpen, onToggle }: AdminSidebarProps) {
 
         <NavLink to="/" className={styles.backToSite}>
           <IconArrowLeft size={18} stroke={1.5} />
-          Về trang chủ
+          Xem website
         </NavLink>
       </aside>
     </>
@@ -74,7 +78,7 @@ export function AdminMenuButton({ onClick }: { onClick: () => void }) {
       className={styles.menuButton}
       type="button"
       onClick={onClick}
-      aria-label="Toggle menu"
+      aria-label="Mở menu quản trị"
     >
       <IconMenu2 size={22} stroke={1.5} />
     </button>

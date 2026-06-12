@@ -1,3 +1,5 @@
+import { adminRequest } from './adminApi'
+
 export interface ConsultationRequest {
   id: number
   fullName: string
@@ -12,16 +14,8 @@ export interface ConsultationRequest {
   updatedAt: string | null
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5000/api'
-
 export async function getConsultationRequests(): Promise<ConsultationRequest[]> {
-  const response = await fetch(`${API_BASE_URL}/consultation-requests`)
-
-  if (!response.ok) {
-    throw new Error(`API request failed with status ${response.status}`)
-  }
-
-  return response.json() as Promise<ConsultationRequest[]>
+  return adminRequest<ConsultationRequest[]>('/consultation-requests')
 }
 
 export async function updateConsultationRequestStatus(
@@ -29,13 +23,8 @@ export async function updateConsultationRequestStatus(
   status: string,
   adminNote?: string,
 ): Promise<void> {
-  const response = await fetch(`${API_BASE_URL}/consultation-requests/${id}/status`, {
+  return adminRequest<void>(`/consultation-requests/${id}/status`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ status, adminNote: adminNote ?? null }),
   })
-
-  if (!response.ok) {
-    throw new Error(`API request failed with status ${response.status}`)
-  }
 }

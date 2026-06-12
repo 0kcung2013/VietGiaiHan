@@ -1,19 +1,20 @@
 import { useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import { AdminSidebar } from './AdminSidebar'
 import { AdminHeader } from './AdminHeader'
 import styles from './AdminLayout.module.css'
 
 const routeTitles: Record<string, string> = {
-  '/admin/dashboard': 'Dashboard',
+  '/admin/dashboard': 'Tổng quan',
   '/admin/consultations': 'Yêu cầu tư vấn',
+  '/admin/products': 'Sản phẩm',
+  '/admin/categories': 'Danh mục',
 }
 
 export function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-
-  const currentPath = window.location.pathname
-  const title = routeTitles[currentPath] ?? 'Quản trị'
+  const location = useLocation()
+  const title = routeTitles[location.pathname] ?? 'Quản trị'
 
   return (
     <div className={styles.layout}>

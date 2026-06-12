@@ -8,6 +8,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped<ProductRepository>();
 builder.Services.AddScoped<ProductCategoryRepository>();
 builder.Services.AddScoped<ConsultationRequestRepository>();
+builder.Services.AddScoped<AdminSummaryRepository>();
 
 var allowedOrigins = builder.Configuration
     .GetSection("Cors:AllowedOrigins")

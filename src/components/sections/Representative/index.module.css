@@ -1,11 +1,11 @@
 .section {
   background: #f7efe3;
-  padding: var(--space-16) 0;
+  padding: clamp(72px, 8vw, 128px) 0;
 }
 
 .inner {
   width: 100%;
-  max-width: min(980px, 100vw);
+  max-width: 100%;
   margin: 0 auto;
   padding: 0 var(--container-pad);
 }
@@ -13,20 +13,23 @@
 .card {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(240px, 40%) 1px minmax(0, 60%);
+  grid-template-columns: minmax(360px, 0.42fr) 1px minmax(0, 0.58fr);
   align-items: stretch;
+  width: clamp(960px, 74vw, 1180px);
+  min-height: clamp(520px, 42vw, 680px);
+  margin: 0 auto;
   overflow: hidden;
   border: 1px solid rgba(201, 168, 76, 0.22);
   border-radius: var(--radius-md);
   background: #fffaf2;
   color: var(--color-wood-900);
-  box-shadow: 0 18px 42px rgba(58, 32, 16, 0.08);
+  box-shadow: 0 28px 68px rgba(58, 32, 16, 0.11);
 }
 
 .card::before {
   position: absolute;
-  right: -0.15em;
-  bottom: -0.32em;
+  right: 0;
+  bottom: 0;
   z-index: 0;
   content: "THTT";
   color: #0f1c2e;
@@ -36,6 +39,7 @@
   line-height: 1;
   opacity: 0.03;
   pointer-events: none;
+  transform: translate(5%, 16%);
 }
 
 .avatarCol,
@@ -46,34 +50,34 @@
 
 .avatarCol {
   display: flex;
-  min-height: clamp(300px, 34vw, 360px);
+  min-height: clamp(520px, 42vw, 680px);
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1.5rem;
-  padding: 3rem 2.5rem;
+  gap: clamp(1.5rem, 2.4vw, 2.4rem);
+  padding: clamp(3.25rem, 5vw, 5rem) clamp(2.5rem, 4vw, 4rem);
   background: #2b180c;
 }
 
 .monogram {
   display: grid;
-  width: 74px;
-  height: 74px;
+  width: clamp(82px, 6vw, 108px);
+  height: clamp(82px, 6vw, 108px);
   place-items: center;
   border: 1px solid #c9a84c;
   border-radius: 50%;
   color: #c9a84c;
   font-family: var(--font-display);
-  font-size: 0.9rem;
+  font-size: clamp(0.9rem, 0.8vw, 1.05rem);
   font-weight: 700;
   letter-spacing: 0.14em;
 }
 
 .avatarRing {
-  width: clamp(140px, 16vw, 170px);
+  width: clamp(170px, 12vw, 220px);
   max-width: 100%;
   aspect-ratio: 1;
-  padding: 6px;
+  padding: clamp(6px, 0.65vw, 9px);
   border: 2px solid #c9a84c;
   border-radius: 50%;
 }
@@ -110,7 +114,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: var(--space-10);
+  padding: clamp(48px, 5vw, 80px);
 }
 
 .badge {
@@ -118,13 +122,13 @@
   width: fit-content;
   align-items: center;
   min-height: 30px;
-  margin-bottom: 1.35rem;
-  padding: 0.5rem 0.9rem;
+  margin-bottom: clamp(1.35rem, 2vw, 2rem);
+  padding: 0.65rem 1rem;
   border-radius: var(--radius-sm);
   background: #c9a84c;
   color: #2b180c;
   font-family: var(--font-body);
-  font-size: 0.66rem;
+  font-size: clamp(0.66rem, 0.65vw, 0.76rem);
   font-weight: 500;
   line-height: 1;
   letter-spacing: 0.2em;
@@ -132,7 +136,7 @@
 }
 
 .nameWrap {
-  margin-bottom: 2.4rem;
+  margin-bottom: clamp(2.4rem, 3.5vw, 3.35rem);
 }
 
 .name {
@@ -140,11 +144,11 @@
   margin: 0;
   color: var(--color-wood-900);
   font-family: var(--font-display);
-  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  font-size: clamp(2.2rem, 3vw, 3.5rem);
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   line-height: 1.15;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .role,
@@ -156,7 +160,7 @@
 .role {
   margin-top: 0.9rem;
   color: #c9a84c;
-  font-size: 0.74rem;
+  font-size: clamp(0.78rem, 0.75vw, 0.9rem);
   font-weight: 500;
   letter-spacing: 0.24em;
 }
@@ -164,7 +168,7 @@
 .infoLabel {
   margin-bottom: 1.15rem;
   color: var(--color-text-muted);
-  font-size: 0.68rem;
+  font-size: clamp(0.72rem, 0.7vw, 0.84rem);
   font-weight: 500;
   letter-spacing: 0.18em;
 }
@@ -172,8 +176,8 @@
 .companyList {
   display: flex;
   flex-direction: column;
-  gap: 1.05rem;
-  margin: 0 0 2.8rem;
+  gap: clamp(1.05rem, 1.3vw, 1.35rem);
+  margin: 0 0 clamp(2.8rem, 3.6vw, 3.6rem);
   padding: 0;
   list-style: none;
 }
@@ -186,7 +190,7 @@
   min-height: 38px;
   color: var(--color-wood-800);
   font-family: var(--font-body);
-  font-size: 0.85rem;
+  font-size: clamp(0.88rem, 0.85vw, 1rem);
   font-weight: 500;
   letter-spacing: 0.08em;
   line-height: 1.55;
@@ -216,7 +220,7 @@
 .addressLabel {
   color: #c9a84c;
   font-family: 'Inter', sans-serif;
-  font-size: 0.65rem;
+  font-size: clamp(0.68rem, 0.65vw, 0.78rem);
   font-weight: 500;
   letter-spacing: 0.18em;
   line-height: 1.4;
@@ -227,20 +231,30 @@
   margin: 0.45rem 0 0;
   color: var(--color-text-secondary);
   font-family: var(--font-body);
-  font-size: 0.85rem;
+  font-size: clamp(0.9rem, 0.9vw, 1.02rem);
   font-weight: 400;
   line-height: 1.8;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1199px) {
+  .card {
+    width: min(100% - 32px, 960px);
+    grid-template-columns: minmax(300px, 0.42fr) 1px minmax(0, 0.58fr);
+    min-height: clamp(460px, 52vw, 560px);
+  }
+
+  .avatarCol {
+    min-height: clamp(460px, 52vw, 560px);
+  }
+
   .name {
-    font-size: clamp(1.2rem, 2.8vw, 1.8rem);
+    font-size: clamp(1.8rem, 3.2vw, 2.6rem);
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .section {
-    padding: 4rem 0;
+    padding: clamp(64px, 8vw, 88px) 0;
   }
 
   .inner {
@@ -248,7 +262,9 @@
   }
 
   .card {
+    width: min(100% - 32px, 760px);
     grid-template-columns: 1fr;
+    min-height: auto;
   }
 
   .card::before {
@@ -259,19 +275,19 @@
   }
 
   .avatarCol {
-    min-height: auto;
-    gap: 1.1rem;
-    padding: 2rem 1.5rem;
+    min-height: clamp(340px, 48vw, 420px);
+    gap: 1.35rem;
+    padding: clamp(2.4rem, 6vw, 3.25rem) 1.75rem;
   }
 
   .monogram {
-    width: 58px;
-    height: 58px;
-    font-size: 0.74rem;
+    width: clamp(64px, 10vw, 82px);
+    height: clamp(64px, 10vw, 82px);
+    font-size: clamp(0.74rem, 1.5vw, 0.9rem);
   }
 
   .avatarRing {
-    width: min(180px, 58vw);
+    width: clamp(170px, 30vw, 220px);
   }
 
   .divider {
@@ -280,7 +296,7 @@
 
   .info {
     width: 100%;
-    padding: 1.5rem;
+    padding: 40px 28px;
   }
 
   .badge {
@@ -293,7 +309,7 @@
   }
 
   .name {
-    font-size: clamp(1.1rem, 5vw, 1.5rem);
+    font-size: clamp(1.6rem, 5vw, 2.3rem);
     white-space: normal;
   }
 
@@ -315,9 +331,41 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
+  .section {
+    padding: 56px 0;
+  }
+
+  .inner {
+    padding: 0;
+  }
+
+  .card {
+    width: calc(100% - 24px);
+  }
+
+  .avatarCol {
+    min-height: clamp(300px, 82vw, 360px);
+    padding: 32px 20px;
+  }
+
+  .avatarRing {
+    width: clamp(132px, 42vw, 170px);
+  }
+
+  .info {
+    padding: 32px 20px;
+  }
+
   .name {
-    font-size: clamp(1rem, 4.5vw, 1.3rem);
+    font-size: clamp(1.28rem, 7vw, 1.85rem);
     white-space: normal;
+  }
+
+  .role,
+  .infoLabel,
+  .companyItem,
+  .addressLabel {
+    overflow-wrap: anywhere;
   }
 }

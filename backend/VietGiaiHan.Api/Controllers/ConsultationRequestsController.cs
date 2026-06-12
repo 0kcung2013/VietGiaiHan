@@ -8,6 +8,14 @@ namespace VietGiaiHan.Api.Controllers;
 [Route("api/consultation-requests")]
 public class ConsultationRequestsController : ControllerBase
 {
+    private static readonly HashSet<string> ValidStatuses = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "new",
+        "contacted",
+        "completed",
+        "cancelled",
+    };
+
     private readonly ConsultationRequestRepository _repository;
 
     public ConsultationRequestsController(ConsultationRequestRepository repository)
@@ -53,6 +61,11 @@ public class ConsultationRequestsController : ControllerBase
         int id,
         [FromBody] UpdateConsultationRequestStatusDto dto)
     {
+        if (!ValidStatuses.Contains(dto.Status))
+        {
+            return BadRequest("Invalid consultation request status.");
+        }
+
         var updated = await _repository.UpdateStatusAsync(id, dto.Status, dto.AdminNote);
 
         if (!updated)

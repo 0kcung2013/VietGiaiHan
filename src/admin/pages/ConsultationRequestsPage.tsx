@@ -1,9 +1,5 @@
-import { useEffect, useState } from 'react'
-import {
-  IconEye,
-  IconRefresh,
-  IconX,
-} from '@tabler/icons-react'
+import { useEffect, useMemo, useState } from 'react'
+import { IconEye, IconRefresh, IconX } from '@tabler/icons-react'
 import {
   getConsultationRequests,
   updateConsultationRequestStatus,
@@ -16,15 +12,17 @@ const STATUS_FILTERS = [
   { value: 'new', label: 'Mới' },
   { value: 'contacted', label: 'Đã liên hệ' },
   { value: 'completed', label: 'Hoàn tất' },
-  { value: 'cancelled', label: 'Hủy' },
+  { value: 'cancelled', label: 'Đã hủy' },
 ]
 
 const STATUS_OPTIONS = [
   { value: 'new', label: 'Mới', className: styles.statusNew },
   { value: 'contacted', label: 'Đã liên hệ', className: styles.statusContacted },
   { value: 'completed', label: 'Hoàn tất', className: styles.statusCompleted },
-  { value: 'cancelled', label: 'Hủy', className: styles.statusCancelled },
+  { value: 'cancelled', label: 'Đã hủy', className: styles.statusCancelled },
 ]
+
+const validStatuses = STATUS_OPTIONS.map((status) => status.value)
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('vi-VN', {
@@ -37,32 +35,45 @@ function formatDate(dateStr: string) {
 }
 
 function getStatusBadge(status: string) {
-  const found = STATUS_OPTIONS.find((s) => s.value === status)
-  return found ?? STATUS_OPTIONS[0]
+  return STATUS_OPTIONS.find((item) => item.value === status) ?? STATUS_OPTIONS[0]
 }
 
 export function ConsultationRequestsPage() {
   const [requests, setRequests] = useState<ConsultationRequest[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState('')
   const [filter, setFilter] = useState('all')
+  const [search, setSearch] = useState('')
   const [selectedRequest, setSelectedRequest] = useState<ConsultationRequest | null>(null)
   const [updating, setUpdating] = useState(false)
+
+  async function loadRequests() {
+    setLoading(true)
+    setError('')
+
+    try {
+      const data = await getConsultationRequests()
+      setRequests(data)
+    } catch {
+      setError('Không thể tải yêu cầu tư vấn.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
     let cancelled = false
 
-    async function load() {
-      setLoading(true)
-      setError(null)
+    async function loadInitialRequests() {
       try {
         const data = await getConsultationRequests()
+
         if (!cancelled) {
           setRequests(data)
         }
       } catch {
         if (!cancelled) {
-          setError('Không thể tải danh sách yêu cầu tư vấn')
+          setError('Không thể tải yêu cầu tư vấn.')
         }
       } finally {
         if (!cancelled) {
@@ -71,87 +82,96 @@ export function ConsultationRequestsPage() {
       }
     }
 
-    load()
+    void loadInitialRequests()
 
     return () => {
       cancelled = true
     }
   }, [])
 
-  const filtered = filter === 'all'
-    ? requests
-    : requests.filter((r) => r.status === filter)
+  const filtered = useMemo(() => {
+    const keyword = search.trim().toLowerCase()
 
-  const handleStatusUpdate = async (id: number, newStatus: string, adminNote?: string) => {
+    return requests.filter((request) => {
+      const matchesStatus = filter === 'all' || request.status === filter
+      const matchesSearch =
+        keyword.length === 0 ||
+        request.fullName.toLowerCase().includes(keyword) ||
+        request.phone.toLowerCase().includes(keyword)
+
+      return matchesStatus && matchesSearch
+    })
+  }, [filter, requests, search])
+
+  async function handleStatusUpdate(id: number, newStatus: string, adminNote?: string) {
+    if (!validStatuses.includes(newStatus)) {
+      setError('Trạng thái không hợp lệ.')
+      return
+    }
+
     setUpdating(true)
+    setError('')
+
     try {
       await updateConsultationRequestStatus(id, newStatus, adminNote)
+      const updatedAt = new Date().toISOString()
+
       setRequests((prev) =>
-        prev.map((r) =>
-          r.id === id
-            ? { ...r, status: newStatus, adminNote: adminNote ?? r.adminNote, updatedAt: new Date().toISOString() }
-            : r,
+        prev.map((request) =>
+          request.id === id
+            ? { ...request, status: newStatus, adminNote: adminNote ?? request.adminNote, updatedAt }
+            : request,
         ),
       )
       setSelectedRequest((prev) =>
         prev && prev.id === id
-          ? { ...prev, status: newStatus, adminNote: adminNote ?? prev.adminNote, updatedAt: new Date().toISOString() }
+          ? { ...prev, status: newStatus, adminNote: adminNote ?? prev.adminNote, updatedAt }
           : prev,
       )
     } catch {
-      alert('Cập nhật trạng thái thất bại')
+      setError('Không thể cập nhật yêu cầu tư vấn.')
     } finally {
       setUpdating(false)
     }
   }
 
   if (loading) {
-    return <div className={styles.loading}>Đang tải dữ liệu...</div>
-  }
-
-  if (error) {
-    return (
-      <div className={styles.error}>
-        <p>{error}</p>
-        <button className={styles.retryBtn} onClick={() => window.location.reload()}>
-          Thử lại
-        </button>
-      </div>
-    )
+    return <div className={styles.loading}>Đang tải yêu cầu tư vấn...</div>
   }
 
   return (
     <div className={styles.page}>
+      {error && <div className={styles.error}>{error}</div>}
+
       <div className={styles.toolbar}>
+        <input
+          className={styles.searchInput}
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder="Tìm kiếm theo tên khách hoặc số điện thoại"
+        />
+
         <div className={styles.filterGroup}>
-          {STATUS_FILTERS.map((f) => (
+          {STATUS_FILTERS.map((item) => (
             <button
-              key={f.value}
-              className={`${styles.filterBtn} ${filter === f.value ? styles.filterBtnActive : ''}`}
-              onClick={() => setFilter(f.value)}
+              key={item.value}
+              className={`${styles.filterBtn} ${filter === item.value ? styles.filterBtnActive : ''}`}
+              type="button"
+              onClick={() => setFilter(item.value)}
             >
-              {f.label}
-              {f.value !== 'all' && (
-                <span style={{ marginLeft: 6, opacity: 0.7 }}>
-                  ({requests.filter((r) => r.status === f.value).length})
-                </span>
-              )}
+              {item.label}
             </button>
           ))}
         </div>
 
-        <button className={styles.filterBtn} onClick={() => window.location.reload()}>
-          <IconRefresh size={14} style={{ marginRight: 4 }} />
+        <button className={styles.filterBtn} type="button" onClick={loadRequests}>
+          <IconRefresh size={14} />
           Làm mới
         </button>
       </div>
 
       {filtered.length === 0 ? (
-        <div className={styles.empty}>
-          {filter === 'all'
-            ? 'Chưa có yêu cầu tư vấn nào'
-            : `Không có yêu cầu ở trạng thái "${getStatusBadge(filter).label}"`}
-        </div>
+        <div className={styles.empty}>Không tìm thấy yêu cầu tư vấn phù hợp.</div>
       ) : (
         <div className={styles.tableWrapper}>
           <table className={styles.table}>
@@ -159,21 +179,25 @@ export function ConsultationRequestsPage() {
               <tr>
                 <th>#</th>
                 <th>Khách hàng</th>
-                <th>SĐT</th>
+                <th>Điện thoại</th>
                 <th>Sản phẩm</th>
                 <th>Nội dung</th>
                 <th>Trạng thái</th>
-                <th>Ngày gửi</th>
-                <th>Hành động</th>
+                <th>Ngày tạo</th>
+                <th>Thao tác</th>
               </tr>
             </thead>
             <tbody>
               {filtered.map((item, index) => {
                 const badge = getStatusBadge(item.status)
+
                 return (
                   <tr key={item.id}>
                     <td>{index + 1}</td>
-                    <td className={styles.customerCell}>{item.fullName}</td>
+                    <td className={styles.customerCell}>
+                      <div className={styles.customerName}>{item.fullName}</div>
+                      <div className={styles.customerMeta}>{item.phone}</div>
+                    </td>
                     <td className={styles.phoneCell}>{item.phone}</td>
                     <td className={styles.productCell}>{item.productName || '-'}</td>
                     <td className={styles.messageCell} title={item.message || ''}>
@@ -186,15 +210,14 @@ export function ConsultationRequestsPage() {
                     </td>
                     <td className={styles.dateCell}>{formatDate(item.createdAt)}</td>
                     <td>
-                      <div className={styles.actions}>
-                        <button
-                          className={styles.actionBtn}
-                          title="Xem chi tiết"
-                          onClick={() => setSelectedRequest(item)}
-                        >
-                          <IconEye size={16} stroke={1.5} />
-                        </button>
-                      </div>
+                      <button
+                        className={styles.actionBtn}
+                        type="button"
+                        title="Xem chi tiết"
+                        onClick={() => setSelectedRequest(item)}
+                      >
+                        <IconEye size={16} stroke={1.5} />
+                      </button>
                     </td>
                   </tr>
                 )
@@ -228,111 +251,86 @@ function DetailModal({
   updating: boolean
 }) {
   const [note, setNote] = useState(request.adminNote ?? '')
-
+  const [status, setStatus] = useState(request.status)
   const badge = getStatusBadge(request.status)
+
+  async function handleSave() {
+    await onStatusUpdate(request.id, status, note)
+  }
 
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+      <div className={styles.modal} onClick={(event) => event.stopPropagation()}>
         <div className={styles.modalHeader}>
-          <h2 className={styles.modalTitle}>Chi tiết yêu cầu #{request.id}</h2>
-          <button className={styles.modalClose} onClick={onClose}>
+          <h2 className={styles.modalTitle}>Yêu cầu #{request.id}</h2>
+          <button className={styles.modalClose} type="button" onClick={onClose}>
             <IconX size={18} stroke={1.5} />
           </button>
         </div>
 
         <div className={styles.modalBody}>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Họ tên</span>
-            <span className={styles.fieldValue}>{request.fullName}</span>
-          </div>
-
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Số điện thoại</span>
-            <span className={styles.fieldValue}>{request.phone}</span>
-          </div>
-
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Sản phẩm quan tâm</span>
-            <span className={styles.fieldValue}>
-              {request.productName || 'Không có sản phẩm cụ thể'}
-            </span>
-          </div>
-
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Nội dung</span>
-            <span className={styles.fieldValue}>
-              {request.message || <em className={styles.fieldValueMuted}>Không có nội dung</em>}
-            </span>
-          </div>
-
+          <Info label="Họ và tên" value={request.fullName} />
+          <Info label="Điện thoại" value={request.phone} />
+          <Info label="Sản phẩm" value={request.productName || 'Chưa chọn sản phẩm'} />
+          <Info label="Nội dung" value={request.message || 'Không có nội dung'} />
           <div className={styles.field}>
             <span className={styles.fieldLabel}>Trạng thái hiện tại</span>
             <span className={`${styles.statusBadge} ${badge.className}`}>{badge.label}</span>
           </div>
+          <Info label="Ngày tạo" value={formatDate(request.createdAt)} />
+          {request.updatedAt && <Info label="Cập nhật" value={formatDate(request.updatedAt)} />}
 
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Ngày gửi</span>
-            <span className={styles.fieldValue}>{formatDate(request.createdAt)}</span>
-          </div>
+          <label className={styles.field}>
+            <span className={styles.fieldLabel}>Trạng thái</span>
+            <select
+              className={styles.selectInput}
+              value={status}
+              onChange={(event) => setStatus(event.target.value)}
+              disabled={updating}
+            >
+              {STATUS_OPTIONS.map((item) => (
+                <option key={item.value} value={item.value}>
+                  {item.label}
+                </option>
+              ))}
+            </select>
+          </label>
 
-          {request.updatedAt && (
-            <div className={styles.field}>
-              <span className={styles.fieldLabel}>Cập nhật lần cuối</span>
-              <span className={styles.fieldValue}>{formatDate(request.updatedAt)}</span>
-            </div>
-          )}
-
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Ghi chú admin</span>
+          <label className={styles.field}>
+            <span className={styles.fieldLabel}>Ghi chú quản trị</span>
             <textarea
               className={styles.noteInput}
               value={note}
-              onChange={(e) => setNote(e.target.value)}
-              placeholder="Nhập ghi chú..."
+              onChange={(event) => setNote(event.target.value)}
+              placeholder="Nhập ghi chú xử lý"
               disabled={updating}
             />
-          </div>
-
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Chuyển trạng thái</span>
-            <div className={styles.statusActions}>
-              {STATUS_OPTIONS.map((opt) => (
-                <button
-                  key={opt.value}
-                  className={`${styles.statusActionBtn} ${
-                    request.status === opt.value
-                      ? styles.statusActionBtnActive
-                      : styles.statusActionBtnInactive
-                  }`}
-                  style={{
-                    borderColor: request.status === opt.value ? 'currentColor' : 'var(--color-border)',
-                    background: request.status === opt.value ? 'currentColor' : 'transparent',
-                    color: request.status === opt.value ? '#fff' : 'var(--color-text-secondary)',
-                  }}
-                  disabled={updating || request.status === opt.value}
-                  onClick={() => onStatusUpdate(request.id, opt.value, note)}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          </div>
+          </label>
         </div>
 
         <div className={styles.modalFooter}>
-          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={onClose}>
+          <button className={`${styles.btn} ${styles.btnSecondary}`} type="button" onClick={onClose}>
             Đóng
           </button>
           <button
             className={`${styles.btn} ${styles.btnPrimary}`}
+            type="button"
             disabled={updating}
-            onClick={() => onStatusUpdate(request.id, request.status, note)}
+            onClick={handleSave}
           >
-            {updating ? 'Đang lưu...' : 'Lưu ghi chú'}
+            {updating ? 'Đang lưu...' : 'Lưu'}
           </button>
         </div>
       </div>
+    </div>
+  )
+}
+
+function Info({ label, value }: { label: string; value: string }) {
+  return (
+    <div className={styles.field}>
+      <span className={styles.fieldLabel}>{label}</span>
+      <span className={styles.fieldValue}>{value}</span>
     </div>
   )
 }
