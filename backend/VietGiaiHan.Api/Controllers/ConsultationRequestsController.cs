@@ -75,4 +75,30 @@ public class ConsultationRequestsController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpPut("{id:int}/viewed")]
+    public async Task<IActionResult> MarkViewed(int id)
+    {
+        var updated = await _repository.MarkViewedAsync(id);
+
+        if (!updated)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
+
+    [HttpPut("mark-viewed")]
+    public async Task<IActionResult> MarkViewed([FromBody] MarkConsultationRequestsViewedDto dto)
+    {
+        if (dto.Ids.Count == 0)
+        {
+            return BadRequest("At least one consultation request id is required.");
+        }
+
+        await _repository.MarkViewedAsync(dto.Ids);
+
+        return NoContent();
+    }
 }

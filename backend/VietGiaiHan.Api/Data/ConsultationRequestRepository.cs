@@ -43,7 +43,7 @@ public class ConsultationRequestRepository
     {
         const string sql = """
             SELECT Id, FullName, Phone, Message, ProductId, ProductName, ProductSlug,
-                   Status, AdminNote, CreatedAt, UpdatedAt
+                   Status, AdminNote, IsViewed, ViewedAt, CreatedAt, UpdatedAt
             FROM ConsultationRequests
             ORDER BY CreatedAt DESC;
             """;
@@ -55,7 +55,7 @@ public class ConsultationRequestRepository
     {
         const string sql = """
             SELECT Id, FullName, Phone, Message, ProductId, ProductName, ProductSlug,
-                   Status, AdminNote, CreatedAt, UpdatedAt
+                   Status, AdminNote, IsViewed, ViewedAt, CreatedAt, UpdatedAt
             FROM ConsultationRequests
             WHERE Id = @Id;
             """;
@@ -92,6 +92,57 @@ public class ConsultationRequestRepository
         return affected > 0;
     }
 
+    public async Task<bool> MarkViewedAsync(int id)
+    {
+        const string sql = """
+            UPDATE ConsultationRequests
+            SET IsViewed = 1,
+                ViewedAt = COALESCE(ViewedAt, SYSUTCDATETIME()),
+                UpdatedAt = SYSUTCDATETIME()
+            WHERE Id = @Id;
+            """;
+
+        await using var connection = new SqlConnection(_connectionString);
+        await using var command = new SqlCommand(sql, connection);
+        command.Parameters.AddWithValue("@Id", id);
+
+        await connection.OpenAsync();
+        var affected = await command.ExecuteNonQueryAsync();
+
+        return affected > 0;
+    }
+
+    public async Task<int> MarkViewedAsync(IReadOnlyList<int> ids)
+    {
+        var uniqueIds = ids.Where(id => id > 0).Distinct().ToArray();
+
+        if (uniqueIds.Length == 0)
+        {
+            return 0;
+        }
+
+        var parameterNames = uniqueIds.Select((_, index) => $"@Id{index}").ToArray();
+        var sql = $"""
+            UPDATE ConsultationRequests
+            SET IsViewed = 1,
+                ViewedAt = COALESCE(ViewedAt, SYSUTCDATETIME()),
+                UpdatedAt = SYSUTCDATETIME()
+            WHERE Id IN ({string.Join(", ", parameterNames)});
+            """;
+
+        await using var connection = new SqlConnection(_connectionString);
+        await using var command = new SqlCommand(sql, connection);
+
+        for (var index = 0; index < uniqueIds.Length; index += 1)
+        {
+            command.Parameters.AddWithValue(parameterNames[index], uniqueIds[index]);
+        }
+
+        await connection.OpenAsync();
+
+        return await command.ExecuteNonQueryAsync();
+    }
+
     private async Task<IReadOnlyList<ConsultationRequest>> QueryAsync(string sql)
     {
         var items = new List<ConsultationRequest>();
@@ -123,8 +174,10 @@ public class ConsultationRequestRepository
             ProductSlug = reader.GetString(6),
             Status = reader.GetString(7),
             AdminNote = reader.IsDBNull(8) ? null : reader.GetString(8),
-            CreatedAt = reader.GetDateTime(9),
-            UpdatedAt = reader.IsDBNull(10) ? null : reader.GetDateTime(10),
+            IsViewed = reader.GetBoolean(9),
+            ViewedAt = reader.IsDBNull(10) ? null : reader.GetDateTime(10),
+            CreatedAt = reader.GetDateTime(11),
+            UpdatedAt = reader.IsDBNull(12) ? null : reader.GetDateTime(12),
         };
     }
 }

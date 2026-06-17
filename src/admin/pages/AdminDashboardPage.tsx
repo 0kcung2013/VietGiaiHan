@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   IconFolder,
+  IconEye,
+  IconEyeCheck,
   IconMessageDots,
   IconMessageReport,
   IconPackage,
-  IconPhoneCall,
-  IconRosetteDiscountCheck,
 } from '@tabler/icons-react'
 import { getAdminSummary, type AdminSummary } from '../services/adminSummaryService'
 import { getConsultationRequests, type ConsultationRequest } from '../services/adminConsultationService'
@@ -17,43 +17,16 @@ function formatDate(dateStr: string) {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
   })
-}
-
-function getStatusClass(status: string) {
-  switch (status) {
-    case 'new':
-      return styles.statusNew
-    case 'contacted':
-      return styles.statusContacted
-    case 'completed':
-      return styles.statusCompleted
-    case 'cancelled':
-      return styles.statusCancelled
-    default:
-      return styles.statusNew
-  }
-}
-
-function getStatusLabel(status: string) {
-  switch (status) {
-    case 'new':
-      return 'Mới'
-    case 'contacted':
-      return 'Đã liên hệ'
-    case 'completed':
-      return 'Hoàn tất'
-    case 'cancelled':
-      return 'Đã hủy'
-    default:
-      return status
-  }
 }
 
 const emptySummary: AdminSummary = {
   totalProducts: 0,
   totalCategories: 0,
   totalConsultationRequests: 0,
+  unviewedConsultationRequests: 0,
   newConsultationRequests: 0,
   contactedConsultationRequests: 0,
   completedConsultationRequests: 0,
@@ -105,48 +78,51 @@ export function AdminDashboardPage() {
     return <div className={styles.empty}>{error}</div>
   }
 
+  const viewedConsultationRequests =
+    summary.totalConsultationRequests - summary.unviewedConsultationRequests
+
   return (
     <div>
       <div className={styles.stats}>
-        <div className={styles.statCard}>
+        <Link to="/admin/consultations?tab=all" className={styles.statCard}>
           <div className={`${styles.statIcon} ${styles.iconGold}`}>
             <IconMessageDots size={24} stroke={1.5} />
-          </div>
-          <div className={styles.statInfo}>
-            <div className={styles.statLabel}>Yêu cầu mới</div>
-            <div className={styles.statValue}>{summary.newConsultationRequests}</div>
-          </div>
-        </div>
-
-        <div className={styles.statCard}>
-          <div className={`${styles.statIcon} ${styles.iconBlue}`}>
-            <IconPhoneCall size={24} stroke={1.5} />
-          </div>
-          <div className={styles.statInfo}>
-            <div className={styles.statLabel}>Đã liên hệ</div>
-            <div className={styles.statValue}>{summary.contactedConsultationRequests}</div>
-          </div>
-        </div>
-
-        <div className={styles.statCard}>
-          <div className={`${styles.statIcon} ${styles.iconGreen}`}>
-            <IconRosetteDiscountCheck size={24} stroke={1.5} />
-          </div>
-          <div className={styles.statInfo}>
-            <div className={styles.statLabel}>Đã hoàn tất</div>
-            <div className={styles.statValue}>{summary.completedConsultationRequests}</div>
-          </div>
-        </div>
-
-        <div className={styles.statCard}>
-          <div className={`${styles.statIcon} ${styles.iconBlue}`}>
-            <IconMessageReport size={24} stroke={1.5} />
           </div>
           <div className={styles.statInfo}>
             <div className={styles.statLabel}>Tổng yêu cầu</div>
             <div className={styles.statValue}>{summary.totalConsultationRequests}</div>
           </div>
-        </div>
+        </Link>
+
+        <Link to="/admin/consultations?tab=new" className={styles.statCard}>
+          <div className={`${styles.statIcon} ${styles.iconAlert}`}>
+            <IconEye size={24} stroke={1.5} />
+          </div>
+          <div className={styles.statInfo}>
+            <div className={styles.statLabel}>Chưa xem</div>
+            <div className={styles.statValue}>{summary.unviewedConsultationRequests}</div>
+          </div>
+        </Link>
+
+        <Link to="/admin/consultations?tab=new" className={styles.statCard}>
+          <div className={`${styles.statIcon} ${styles.iconWood}`}>
+            <IconMessageReport size={24} stroke={1.5} />
+          </div>
+          <div className={styles.statInfo}>
+            <div className={styles.statLabel}>Mới</div>
+            <div className={styles.statValue}>{summary.newConsultationRequests}</div>
+          </div>
+        </Link>
+
+        <Link to="/admin/consultations?tab=viewed" className={styles.statCard}>
+          <div className={`${styles.statIcon} ${styles.iconGreen}`}>
+            <IconEyeCheck size={24} stroke={1.5} />
+          </div>
+          <div className={styles.statInfo}>
+            <div className={styles.statLabel}>Đã xem</div>
+            <div className={styles.statValue}>{viewedConsultationRequests}</div>
+          </div>
+        </Link>
 
         <div className={styles.statCard}>
           <div className={`${styles.statIcon} ${styles.iconWood}`}>
@@ -176,16 +152,20 @@ export function AdminDashboardPage() {
         ) : (
           <div className={styles.recentList}>
             {recentConsultations.map((item) => (
-              <div key={item.id} className={styles.recentItem}>
-                <div>
-                  <div className={styles.recentName}>{item.fullName}</div>
+              <div key={item.id} className={`${styles.recentItem} ${!item.isViewed ? styles.recentUnread : ''}`}>
+                <div className={styles.recentMain}>
+                  <div className={styles.recentName}>
+                    {!item.isViewed && <span className={styles.unreadDot} />}
+                    {item.fullName}
+                  </div>
+                  <div className={styles.recentPhone}>{item.phone}</div>
                   <div className={styles.recentProduct}>
                     {item.productName || 'Chưa chọn sản phẩm'}
                   </div>
                 </div>
                 <div className={styles.recentMeta}>
-                  <span className={`${styles.statusBadge} ${getStatusClass(item.status)}`}>
-                    {getStatusLabel(item.status)}
+                  <span className={`${styles.viewBadge} ${item.isViewed ? styles.viewedBadge : styles.unviewedBadge}`}>
+                    {item.isViewed ? 'Đã xem' : 'Chưa xem'}
                   </span>
                   <span className={styles.recentDate}>{formatDate(item.createdAt)}</span>
                 </div>

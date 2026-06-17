@@ -11,6 +11,8 @@ public class ConsultationRequest
     public string ProductSlug { get; set; } = string.Empty;
     public string Status { get; set; } = "new";
     public string? AdminNote { get; set; }
+    public bool IsViewed { get; set; }
+    public DateTime? ViewedAt { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 }

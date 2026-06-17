@@ -21,6 +21,8 @@ BEGIN
         ProductSlug     NVARCHAR(255)  NOT NULL,
         Status          NVARCHAR(50)   NOT NULL CONSTRAINT DF_ConsultationRequests_Status DEFAULT N'new',
         AdminNote       NVARCHAR(1000) NULL,
+        IsViewed        BIT            NOT NULL CONSTRAINT DF_ConsultationRequests_IsViewed DEFAULT 0,
+        ViewedAt        DATETIME2      NULL,
         CreatedAt       DATETIME2      NOT NULL CONSTRAINT DF_ConsultationRequests_CreatedAt DEFAULT SYSUTCDATETIME(),
         UpdatedAt       DATETIME2      NULL
     );
@@ -37,6 +39,19 @@ IF NOT EXISTS
 )
 BEGIN
     CREATE INDEX IX_ConsultationRequests_Status ON dbo.ConsultationRequests(Status);
+END
+GO
+
+-- Index for admin unread queue
+IF NOT EXISTS
+(
+    SELECT 1
+    FROM sys.indexes
+    WHERE name = N'IX_ConsultationRequests_IsViewed'
+      AND object_id = OBJECT_ID(N'dbo.ConsultationRequests')
+)
+BEGIN
+    CREATE INDEX IX_ConsultationRequests_IsViewed ON dbo.ConsultationRequests(IsViewed);
 END
 GO
 

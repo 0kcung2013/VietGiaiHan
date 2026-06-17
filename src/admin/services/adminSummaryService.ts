@@ -4,6 +4,7 @@ export interface AdminSummary {
   totalProducts: number
   totalCategories: number
   totalConsultationRequests: number
+  unviewedConsultationRequests: number
   newConsultationRequests: number
   contactedConsultationRequests: number
   completedConsultationRequests: number

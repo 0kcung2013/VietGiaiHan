@@ -20,6 +20,7 @@ public class AdminSummaryRepository
                 (SELECT COUNT(*) FROM Products) AS TotalProducts,
                 (SELECT COUNT(*) FROM ProductCategories) AS TotalCategories,
                 (SELECT COUNT(*) FROM ConsultationRequests) AS TotalConsultationRequests,
+                (SELECT COUNT(*) FROM ConsultationRequests WHERE IsViewed = 0) AS UnviewedConsultationRequests,
                 (SELECT COUNT(*) FROM ConsultationRequests WHERE Status = N'new') AS NewConsultationRequests,
                 (SELECT COUNT(*) FROM ConsultationRequests WHERE Status = N'contacted') AS ContactedConsultationRequests,
                 (SELECT COUNT(*) FROM ConsultationRequests WHERE Status = N'completed') AS CompletedConsultationRequests;
@@ -41,9 +42,10 @@ public class AdminSummaryRepository
             TotalProducts = reader.GetInt32(0),
             TotalCategories = reader.GetInt32(1),
             TotalConsultationRequests = reader.GetInt32(2),
-            NewConsultationRequests = reader.GetInt32(3),
-            ContactedConsultationRequests = reader.GetInt32(4),
-            CompletedConsultationRequests = reader.GetInt32(5),
+            UnviewedConsultationRequests = reader.GetInt32(3),
+            NewConsultationRequests = reader.GetInt32(4),
+            ContactedConsultationRequests = reader.GetInt32(5),
+            CompletedConsultationRequests = reader.GetInt32(6),
         };
     }
 }
