@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import {
   IconCheck,
   IconClock,
@@ -64,8 +64,13 @@ function getTabCount(
   }
 }
 
+function toLocalDate(dateStr: string) {
+  const iso = dateStr.endsWith('Z') ? dateStr : `${dateStr}Z`
+  return new Date(iso)
+}
+
 function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString('vi-VN', {
+  return toLocalDate(dateStr).toLocaleDateString('vi-VN', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -75,7 +80,7 @@ function formatDate(dateStr: string) {
 }
 
 function formatDateParts(dateStr: string) {
-  const date = new Date(dateStr)
+  const date = toLocalDate(dateStr)
 
   return {
     date: date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' }),
@@ -361,8 +366,22 @@ export function ConsultationRequestsPage() {
     }
   }
 
+  async function fetchRequests() {
+    try {
+      const data = await getConsultationRequests()
+      setRequests(data)
+    } catch {
+      setError('Không thể tải yêu cầu tư vấn.')
+    }
+  }
+
   useEffect(() => {
     void loadRequests()
+  }, [])
+
+  useEffect(() => {
+    const id = setInterval(() => void fetchRequests(), 5000)
+    return () => clearInterval(id)
   }, [])
 
   useEffect(() => {
@@ -809,6 +828,21 @@ function DetailModal({
         <div className={styles.modalFooter}>
           <button className={`${styles.btn} ${styles.btnSecondary}`} type="button" onClick={handleRequestClose}>
             Đóng
+          </button>
+          <button
+            className={`${styles.btn} ${styles.btnSecondary}`}
+            type="button"
+            onClick={() => {
+              const params = new URLSearchParams({
+                name: request.fullName,
+                phone: request.phone,
+                product: request.productName,
+                message: request.message ?? '',
+              })
+              window.location.href = `/#contact?${params.toString()}`
+            }}
+          >
+            Gửi yêu cầu
           </button>
           <button className={`${styles.btn} ${styles.btnPrimary}`} type="button" disabled={updating} onClick={handleSave}>
             {updating ? 'Đang lưu...' : 'Lưu thay đổi'}
