@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import {
   createAdminProduct,
@@ -9,6 +9,7 @@ import {
   type SaveProductPayload,
 } from '../services/adminProductService'
 import { getAdminCategories, type AdminCategory } from '../services/adminCategoryService'
+import { uploadImage } from '../services/adminUploadService'
 import styles from './AdminCrudPage.module.css'
 
 const emptyProduct: SaveProductPayload = {
@@ -216,6 +217,7 @@ export function AdminProductsPage() {
           <table className={styles.table}>
             <thead>
               <tr>
+                <th>Hình ảnh</th>
                 <th>Tên sản phẩm</th>
                 <th>Danh mục</th>
                 <th>Trạng thái</th>
@@ -228,6 +230,18 @@ export function AdminProductsPage() {
             <tbody>
               {filteredProducts.map((product) => (
                 <tr key={product.id}>
+                  <td data-label="Hình ảnh">
+                    <div className={styles.imageCell}>
+                      <img
+                        className={styles.imageThumb}
+                        src={product.imageUrl}
+                        alt={product.name}
+                        onError={(e) => {
+                          ;(e.target as HTMLImageElement).src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="%238a7a6d" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>'
+                        }}
+                      />
+                    </div>
+                  </td>
                   <td data-label="Sản phẩm">
                     <div className={styles.primaryStack}>
                       <div className={styles.nameCell}>{product.name}</div>
@@ -321,15 +335,39 @@ function ProductForm({
     initialProduct ? toPayload(initialProduct) : emptyProduct,
   )
   const [saving, setSaving] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const [imageError, setImageError] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   function updateField<K extends keyof SaveProductPayload>(key: K, value: SaveProductPayload[K]) {
     setForm((prev) => ({ ...prev, [key]: value }))
+    if (key === 'imageUrl') {
+      setImageError(false)
+    }
   }
 
   function handleCategoryChange(value: string) {
     const category = categories.find((item) => String(item.id) === value)
     updateField('categoryId', category ? category.id : null)
     updateField('category', category ? category.name : '')
+  }
+
+  async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    setUploading(true)
+    try {
+      const url = await uploadImage(file)
+      updateField('imageUrl', url)
+    } catch {
+      alert('Không thể tải ảnh lên. Vui lòng thử lại.')
+    } finally {
+      setUploading(false)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+    }
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -381,9 +419,48 @@ function ProductForm({
             Tên danh mục
             <input className={styles.input} value={form.category} onChange={(event) => updateField('category', event.target.value)} required />
           </label>
-          <label className={styles.field}>
-            Đường dẫn ảnh
-            <input className={styles.input} value={form.imageUrl} onChange={(event) => updateField('imageUrl', event.target.value)} required />
+          <label className={`${styles.wideField} ${styles.imageUploadField}`}>
+            Ảnh sản phẩm
+            <div className={styles.imageUploadRow}>
+              <div className={styles.imagePreview}>
+                {form.imageUrl ? (
+                  <img
+                    src={form.imageUrl}
+                    alt="Preview"
+                    onError={() => setImageError(true)}
+                    onLoad={() => setImageError(false)}
+                  />
+                ) : null}
+                {(!form.imageUrl || imageError) && (
+                  <div className={styles.imagePlaceholder}>
+                    {uploading ? 'Đang tải...' : 'Chưa có ảnh'}
+                  </div>
+                )}
+              </div>
+              <div className={styles.imageUploadActions}>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/gif,image/webp"
+                  onChange={handleFileUpload}
+                  className={styles.hiddenFileInput}
+                />
+                <button
+                  className={`${styles.button} ${styles.uploadBtn}`}
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                >
+                  {uploading ? 'Đang tải...' : 'Tải ảnh lên'}
+                </button>
+                <input
+                  className={styles.input}
+                  value={form.imageUrl}
+                  onChange={(event) => updateField('imageUrl', event.target.value)}
+                  placeholder="Hoặc nhập URL ảnh"
+                />
+              </div>
+            </div>
           </label>
           <label className={styles.field}>
             Thứ tự sắp xếp
