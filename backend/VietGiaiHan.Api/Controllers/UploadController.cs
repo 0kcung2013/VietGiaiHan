@@ -9,6 +9,7 @@ public class UploadController : ControllerBase
     private static readonly HashSet<string> AllowedExtensions = new(StringComparer.OrdinalIgnoreCase)
     {
         ".jpg", ".jpeg", ".png", ".gif", ".webp",
+        ".pdf", ".doc", ".docx",
     };
 
     private const long MaxFileSize = 5 * 1024 * 1024; // 5 MB

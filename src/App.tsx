@@ -8,6 +8,7 @@ import { AdminLayout } from './admin/components/AdminLayout'
 import { AdminLoginPage } from './admin/pages/AdminLoginPage'
 import { AdminDashboardPage } from './admin/pages/AdminDashboardPage'
 import { ConsultationRequestsPage } from './admin/pages/ConsultationRequestsPage'
+import { AdminJobApplicationsPage } from './admin/pages/AdminJobApplicationsPage'
 import { AdminProductsPage } from './admin/pages/AdminProductsPage'
 import { AdminCategoriesPage } from './admin/pages/AdminCategoriesPage'
 
@@ -44,6 +45,7 @@ function App() {
             <Route index element={<AdminDashboardPage />} />
             <Route path="dashboard" element={<AdminDashboardPage />} />
             <Route path="consultations" element={<ConsultationRequestsPage />} />
+            <Route path="job-applications" element={<AdminJobApplicationsPage />} />
             <Route path="products" element={<AdminProductsPage />} />
             <Route path="categories" element={<AdminCategoriesPage />} />
           </Route>

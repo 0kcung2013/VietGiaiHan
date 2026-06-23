@@ -29,6 +29,13 @@ public class AdminController : ControllerBase
         return Ok(summary);
     }
 
+    [HttpGet("consultation-stats")]
+    public async Task<ActionResult<IReadOnlyList<DailyConsultationStatsDto>>> GetDailyConsultationStats([FromQuery] int days = 7)
+    {
+        var stats = await _summaryRepository.GetDailyConsultationStatsAsync(days);
+        return Ok(stats);
+    }
+
     [HttpGet("products")]
     public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts()
     {

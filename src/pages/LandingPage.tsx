@@ -3,6 +3,7 @@ import { Footer } from '../components/layout/Footer'
 import { About } from '../components/sections/About'
 import { CategoriesShowcase } from '../components/sections/CategoriesShowcase'
 import { Contact } from '../components/sections/Contact'
+import { JobApplication } from '../components/sections/JobApplication'
 import { GalleryShowcase } from '../components/sections/GalleryShowcase'
 import { Hero } from '../components/sections/Hero'
 import { Marquee } from '../components/sections/Marquee'
@@ -32,6 +33,7 @@ export function LandingPage() {
         <Testimonials />
         <TrustStats />
         <Representative />
+        <JobApplication />
         <Contact />
       </main>
       <Footer />

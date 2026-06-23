@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import {
   IconArrowLeft,
+  IconClipboardList,
   IconFolder,
   IconLayoutDashboard,
   IconMenu2,
@@ -26,6 +27,7 @@ const navItems = [
     section: 'Quản lý nội dung',
     items: [
       { label: 'Yêu cầu tư vấn', to: '/admin/consultations', icon: IconMessageDots },
+      { label: 'Đơn ứng tuyển', to: '/admin/job-applications', icon: IconClipboardList },
       { label: 'Sản phẩm', to: '/admin/products', icon: IconPackage },
       { label: 'Danh mục', to: '/admin/categories', icon: IconFolder },
     ],
