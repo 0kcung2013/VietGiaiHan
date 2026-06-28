@@ -74,11 +74,6 @@ function getStatusBadge(status: string) {
   return STATUS_OPTIONS.find((item) => item.value === status) ?? STATUS_OPTIONS[0]
 }
 
-function truncateText(value: string | null | undefined, maxLength = 72) {
-  const text = value?.trim() || '-'
-  return text.length > maxLength ? `${text.slice(0, maxLength - 1)}...` : text
-}
-
 function xmlEscape(value: string | number | null | undefined) {
   return String(value ?? '')
     .replaceAll('&', '&amp;')
@@ -160,7 +155,7 @@ function createZip(files: Array<{ name: string; content: string }>) {
   const chunks: number[] = []
   const centralDirectory: number[] = []
   const { dosDate, dosTime } = getDosDateTime()
-  let offset = 0
+  let localOffset = 0
 
   files.forEach((file) => {
     const nameBytes = encoder.encode(file.name)
@@ -179,7 +174,7 @@ function createZip(files: Array<{ name: string; content: string }>) {
     writeUint16(chunks, nameBytes.length)
     writeUint16(chunks, 0)
     chunks.push(...nameBytes, ...contentBytes)
-    offset = chunks.length
+    localOffset = chunks.length
 
     writeUint32(centralDirectory, 0x02014b50)
     writeUint16(centralDirectory, 20)
@@ -197,7 +192,7 @@ function createZip(files: Array<{ name: string; content: string }>) {
     writeUint16(centralDirectory, 0)
     writeUint16(centralDirectory, 0)
     writeUint32(centralDirectory, 0)
-    writeUint32(centralDirectory, localHeaderOffset)
+    writeUint32(centralDirectory, localOffset)
     centralDirectory.push(...nameBytes)
   })
 

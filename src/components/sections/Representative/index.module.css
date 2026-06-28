@@ -140,15 +140,15 @@
 }
 
 .name {
-  max-width: 680px;
+  max-width: 100%;
   margin: 0;
   color: var(--color-wood-900);
   font-family: var(--font-display);
-  font-size: clamp(2.2rem, 3vw, 3.5rem);
+  font-size: clamp(1.2rem, 2.2vw, 2.4rem);
   font-weight: 700;
-  letter-spacing: 0;
-  line-height: 1.15;
-  white-space: normal;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 .role,
@@ -309,8 +309,8 @@
   }
 
   .name {
-    font-size: clamp(1.6rem, 5vw, 2.3rem);
-    white-space: normal;
+    font-size: clamp(1.1rem, 3.6vw, 1.8rem);
+    white-space: nowrap;
   }
 
   .companyList {
@@ -358,8 +358,8 @@
   }
 
   .name {
-    font-size: clamp(1.28rem, 7vw, 1.85rem);
-    white-space: normal;
+    font-size: clamp(0.95rem, 5.2vw, 1.4rem);
+    white-space: nowrap;
   }
 
   .role,
@@ -367,5 +367,13 @@
   .companyItem,
   .addressLabel {
     overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 380px) {
+  .name {
+    white-space: normal;
+    overflow-wrap: break-word;
+    line-height: 1.3;
   }
 }
