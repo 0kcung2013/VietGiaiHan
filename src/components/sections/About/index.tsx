@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion'
+import { useRef, useEffect, useState } from 'react'
+import { motion, useInView, animate } from 'framer-motion'
 import { IconAward, IconHeart, IconLeaf, IconRulerMeasure } from '@tabler/icons-react'
 import aboutMain from '../../../assets/images/about-main.jpg'
 import aboutSecond from '../../../assets/images/about-second.jpg'
@@ -31,7 +32,73 @@ const points = [
   },
 ]
 
+const stats = [
+  { end: 500, suffix: '+', label: 'Sản phẩm' },
+  { end: 10, suffix: '+', label: 'Năm kinh nghiệm' },
+  { end: 100, suffix: '%', label: 'Tận tâm' },
+]
+
+function AnimatedCounter({ end, suffix }: { end: number; suffix: string }) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const inView = useInView(ref, { once: true, amount: 0.5 })
+  const [display, setDisplay] = useState('0')
+
+  useEffect(() => {
+    if (!inView) return
+    let cancelled = false
+    const controls = animate(0, end, {
+      duration: 1.8,
+      ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
+      onUpdate: (v) => {
+        if (!cancelled) setDisplay(`${Math.round(v)}`)
+      },
+    })
+    return () => {
+      cancelled = true
+      controls.stop()
+    }
+  }, [inView, end])
+
+  return (
+    <span ref={ref} className={styles.statNum}>
+      {display}{suffix}
+    </span>
+  )
+}
+
+function ProgressRing({ progress }: { progress: number }) {
+  const circumference = 2 * Math.PI * 18
+  const offset = circumference - (progress / 100) * circumference
+
+  return (
+    <svg className={styles.progressRing} viewBox="0 0 44 44">
+      <circle
+        className={styles.progressRingBg}
+        cx="22"
+        cy="22"
+        r="18"
+        fill="none"
+        strokeWidth="2.5"
+      />
+      <circle
+        className={styles.progressRingFill}
+        cx="22"
+        cy="22"
+        r="18"
+        fill="none"
+        strokeWidth="2.5"
+        strokeDasharray={circumference}
+        strokeDashoffset={offset}
+        strokeLinecap="round"
+      />
+    </svg>
+  )
+}
+
 export function About() {
+  const imageRef = useRef<HTMLDivElement>(null)
+  const imageInView = useInView(imageRef, { once: true, amount: 0.3 })
+
   return (
     <section className={styles.section} id="about">
       <div className={styles.inner}>
@@ -50,45 +117,64 @@ export function About() {
           </p>
 
           <div className={styles.stats}>
-            <div className={styles.stat}>
-              <span className={styles.statNum}>500+</span>
-              <span className={styles.statLabel}>Sản phẩm</span>
-            </div>
-            <div className={styles.statDivider} />
-            <div className={styles.stat}>
-              <span className={styles.statNum}>10+</span>
-              <span className={styles.statLabel}>Năm kinh nghiệm</span>
-            </div>
-            <div className={styles.statDivider} />
-            <div className={styles.stat}>
-              <span className={styles.statNum}>100%</span>
-              <span className={styles.statLabel}>Tận tâm</span>
-            </div>
+            {stats.map((stat, i) => (
+              <div key={stat.label} className={styles.statItem}>
+                <div className={styles.statRingWrap}>
+                  <ProgressRing progress={stat.end} />
+                  <div className={styles.statContent}>
+                    <AnimatedCounter end={stat.end} suffix={stat.suffix} />
+                    <span className={styles.statLabel}>{stat.label}</span>
+                  </div>
+                </div>
+                {i < stats.length - 1 && <div className={styles.statDivider} />}
+              </div>
+            ))}
           </div>
 
-          <div className={styles.imageGrid}>
-            <div className={styles.imageMain}>
-              <img src={aboutMain} alt="Xưởng chế tác gỗ Việt Giai Hân" className={styles.img} />
-            </div>
-            <div className={styles.imageSecond}>
+          <div className={styles.imageGrid} ref={imageRef}>
+            <motion.div
+              className={styles.imageMain}
+              initial={{ clipPath: 'inset(100% 0 0 0)' }}
+              animate={imageInView ? { clipPath: 'inset(0% 0 0 0)' } : {}}
+              transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
+            >
+              <img src={aboutMain} alt="Xưởng chế tác gỗ Việt Giai Hân" className={`${styles.img} ${styles.kenBurns}`} />
+            </motion.div>
+            <motion.div
+              className={styles.imageSecond}
+              initial={{ clipPath: 'inset(0 0 100% 0)' }}
+              animate={imageInView ? { clipPath: 'inset(0 0 0% 0)' } : {}}
+              transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1], delay: 0.15 }}
+            >
               <img src={aboutSecond} alt="Sản phẩm gỗ thủ công" className={styles.img} />
-              <div className={styles.imageBadge}>
+              <motion.div
+                className={styles.imageBadge}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={imageInView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.5, delay: 0.8 }}
+              >
                 <span className={styles.badgeNumber}>10+</span>
                 <span className={styles.badgeText}>Năm gìn nghề</span>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </motion.div>
 
-        <motion.div
-          className={styles.panel}
-          initial={{ opacity: 0, x: 32 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
-        >
-          {points.map((point) => (
-            <article className={styles.point} key={point.title}>
+        <div className={styles.panel}>
+          {points.map((point, index) => (
+            <motion.article
+              className={styles.point}
+              key={point.title}
+              initial={{ opacity: 0, x: 32 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{
+                duration: 0.55,
+                delay: index * 0.12,
+                ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
+              }}
+            >
+              <span className={styles.pointIndex}>{String(index + 1).padStart(2, '0')}</span>
               <div
                 className={styles.icon}
                 style={{
@@ -99,13 +185,13 @@ export function About() {
               >
                 <point.icon size={22} stroke={1.5} />
               </div>
-              <div>
+              <div className={styles.pointText}>
                 <h3>{point.title}</h3>
                 <p>{point.text}</p>
               </div>
-            </article>
+            </motion.article>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   )
