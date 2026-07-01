@@ -1,7 +1,9 @@
 import { useRef, useCallback, type MouseEvent, useEffect, useState } from 'react'
 import { motion, useMotionValue, useSpring, useTransform, useScroll, useInView, type Variants } from 'framer-motion'
 import { IconChevronDown, IconHammer, IconLeaf, IconPackage, IconArrowRight } from '@tabler/icons-react'
-import heroWood from '../../../assets/images/hero-wood.jpg'
+import heroWood from '../../../assets/images/123.png'
+import aboutMain from '../../../assets/images/about-main.jpg'
+import aboutSecond from '../../../assets/images/about-second.jpg'
 import styles from './index.module.css'
 
 /* ─── Variants ────────────────────────────────────────────────── */
@@ -303,42 +305,55 @@ export function Hero() {
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 36 }}
             transition={{ duration: 0.9, ease: cubicSmooth, delay: 0.4 }}
           >
-            <motion.div
+            <div
               ref={visualRef}
-              className={styles.visual}
+              className={styles.collage}
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
               style={{ rotateX, rotateY, transformPerspective: 1200 }}
             >
-              <motion.div className={styles.frame} style={{ y: imageY }}>
-                <div className={styles.frameInner}>
-                  <img
-                    src={heroWood}
-                    alt="Đồ gỗ mỹ nghệ Việt Giai Hân — Chế tác thủ công tinh xảo"
-                    className={styles.heroImg}
-                    draggable={false}
-                    loading="lazy"
-                  />
-                  <div className={styles.frameVignette} />
-                </div>
-
-                {/* Carpenter's corner marks */}
-                <span className={`${styles.cornerMark} ${styles.cornerTl}`} aria-hidden="true" />
-                <span className={`${styles.cornerMark} ${styles.cornerTr}`} aria-hidden="true" />
-                <span className={`${styles.cornerMark} ${styles.cornerBl}`} aria-hidden="true" />
-                <span className={`${styles.cornerMark} ${styles.cornerBr}`} aria-hidden="true" />
-
-                {/* Hanging wood tag */}
-                <div className={styles.tag} aria-hidden="true">
-                  <span className={styles.tagHole} />
-                  <span className={styles.tagText}>
-                    Mộc Thủ Công
-                    <br />
-                    Bình Dương
-                  </span>
+              <motion.div className={styles.imgMain} style={{ y: imageY }}>
+                <img
+                  src={heroWood}
+                  alt="Đồ gỗ mỹ nghệ Việt Giai Hân — Chế tác thủ công tinh xảo"
+                  className={styles.heroImg}
+                  draggable={false}
+                  loading="eager"
+                />
+              </motion.div>
+              <motion.div
+                className={styles.imgSecond}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ duration: 0.7, ease: cubicSmooth, delay: 0.7 }}
+              >
+                <img
+                  src={aboutMain}
+                  alt="Chi tiết sản phẩm đồ gỗ thủ công"
+                  className={styles.heroImg}
+                  draggable={false}
+                  loading="lazy"
+                />
+              </motion.div>
+              <motion.div
+                className={styles.imgThird}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ duration: 0.7, ease: cubicSmooth, delay: 0.9 }}
+              >
+                <img
+                  src={aboutSecond}
+                  alt="Không gian trưng bày đồ gỗ mỹ nghệ"
+                  className={styles.heroImg}
+                  draggable={false}
+                  loading="lazy"
+                />
+                <div className={styles.imgOverlay}>
+                  <span className={styles.imgOverlayText}>Mộc Thủ Công</span>
+                  <span className={styles.imgOverlaySub}>Bình Dương</span>
                 </div>
               </motion.div>
-            </motion.div>
+            </div>
           </motion.div>
         </motion.div>
 
