@@ -1,7 +1,92 @@
 /* ═══════════════════════════════════════════════════════════════
-   Hero — Luxury Cinematic Vietnamese Craftsmanship
-   Poltrona Frau / Minotti tier · Warm dark · Gold volumetric
+   Hero — Việt Giai Hân Studio
+   Wood-craft atelier · vòng tuổi gỗ (growth-ring) signature system
    ═══════════════════════════════════════════════════════════════ */
+
+.root {
+  --wood-bark: #2A1B10;
+  --wood-bark-rgb: 42, 27, 16;
+  --wood-walnut: #4A3019;
+  --wood-walnut-rgb: 74, 48, 25;
+  --wood-honey: #C9883E;
+  --wood-honey-rgb: 201, 136, 62;
+  --wood-honey-light: #E3B570;
+  --wood-lacquer: #9C3322;
+  --wood-lacquer-rgb: 156, 51, 34;
+  --wood-jade: #6C8B76;
+  --wood-jade-rgb: 108, 139, 118;
+  --wood-linen: #F2E8D8;
+  --wood-linen-rgb: 242, 232, 216;
+  --wood-ink: #170E07;
+  position: relative;
+}
+
+/* ─── Loading Splash ──────────────────────────────────────────── */
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--wood-bark);
+  gap: 22px;
+}
+
+.splashRings {
+  width: 56px;
+  height: 56px;
+  overflow: visible;
+}
+
+.splashRings circle {
+  fill: none;
+  stroke-width: 2.5;
+  transform-origin: 28px 28px;
+}
+
+.splashRings circle:nth-child(1) {
+  stroke: var(--wood-honey);
+  animation: ringPop 1.6s cubic-bezier(0.23, 1, 0.32, 1) infinite;
+}
+
+.splashRings circle:nth-child(2) {
+  stroke: var(--wood-lacquer);
+  animation: ringPop 1.6s cubic-bezier(0.23, 1, 0.32, 1) infinite 0.2s;
+}
+
+.splashRings circle:nth-child(3) {
+  stroke: rgba(var(--wood-linen-rgb), 0.5);
+  animation: ringPop 1.6s cubic-bezier(0.23, 1, 0.32, 1) infinite 0.4s;
+}
+
+@keyframes ringPop {
+  0% { transform: scale(0.35); opacity: 0; }
+  55% { opacity: 0.9; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+.splashText {
+  color: rgba(var(--wood-linen-rgb), 0.75);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+/* ─── Progress Bar ───────────────────────────────────────────── */
+.progressBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 1000;
+  background: linear-gradient(90deg, var(--wood-lacquer), var(--wood-honey));
+  transform-origin: 0% 50%;
+}
 
 /* ─── Section ──────────────────────────────────────────────── */
 .hero {
@@ -9,119 +94,43 @@
   width: 100%;
   min-height: 100svh;
   overflow: hidden;
-  background: linear-gradient(160deg, #0F0C08 0%, #1A1612 40%, #241E18 100%);
+  background: radial-gradient(ellipse 130% 90% at 28% -10%, var(--wood-walnut) 0%, var(--wood-bark) 55%, var(--wood-ink) 100%);
 }
 
-/* ── Vignette Overlay ──────────────────────────────────────── */
-.hero::after {
-  content: '';
+/* ─── Ambient Growth-Ring Motif ───────────────────────────────── */
+.bgMotif {
   position: absolute;
-  inset: 0;
-  z-index: 2;
-  background: radial-gradient(
-    ellipse 85% 75% at 50% 50%,
-    transparent 40%,
-    rgba(10, 8, 5, 0.45) 100%
-  );
-  pointer-events: none;
-}
-
-/* ─── Radial Gold Glows (volumetric light) ─────────────────── */
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background:
-    radial-gradient(ellipse 50% 50% at 72% 30%, rgba(212, 177, 111, 0.12) 0%, transparent 70%),
-    radial-gradient(ellipse 45% 45% at 18% 65%, rgba(180, 140, 70, 0.08) 0%, transparent 65%);
-  pointer-events: none;
-}
-
-/* ─── Ambient Blobs ────────────────────────────────────────── */
-.blobs {
-  position: absolute;
-  inset: 0;
   z-index: 0;
+  right: -22vw;
+  bottom: -26vw;
+  width: 64vw;
+  height: 64vw;
+  min-width: 480px;
+  min-height: 480px;
+  opacity: 0.07;
   pointer-events: none;
-  overflow: hidden;
+  animation: motifDrift 160s linear infinite;
 }
 
-.blob1,
-.blob2,
-.blob3 {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(130px);
-  will-change: transform;
-  opacity: 1;
+@keyframes motifDrift {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-.blob1 {
-  width: 560px;
-  height: 560px;
-  top: 8%;
-  right: 15%;
-  background: radial-gradient(circle, rgba(212, 177, 111, 0.2) 0%, rgba(160, 120, 50, 0.08) 55%, transparent 80%);
-  animation: blobDrift1 24s cubic-bezier(0.23, 1, 0.32, 1) infinite;
+.bgMotif circle {
+  fill: none;
+  stroke: var(--wood-honey);
 }
 
-.blob2 {
-  width: 480px;
-  height: 480px;
-  bottom: 12%;
-  left: 6%;
-  background: radial-gradient(circle, rgba(180, 130, 60, 0.16) 0%, rgba(120, 90, 45, 0.06) 55%, transparent 80%);
-  animation: blobDrift2 28s cubic-bezier(0.23, 1, 0.32, 1) infinite;
-}
-
-.blob3 {
-  width: 400px;
-  height: 400px;
-  top: 45%;
-  left: 38%;
-  background: radial-gradient(circle, rgba(140, 130, 90, 0.1) 0%, rgba(100, 90, 60, 0.04) 55%, transparent 80%);
-  animation: blobDrift3 32s cubic-bezier(0.23, 1, 0.32, 1) infinite;
-}
-
-/* ─── Gold Dust Particles ──────────────────────────────────── */
-.dustLayer {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.dust {
-  position: absolute;
-  border-radius: 50%;
-  background: radial-gradient(circle, #f0d9a0 0%, #d4b16f 40%, transparent 100%);
-  box-shadow: 0 0 4px rgba(212, 177, 111, 0.3);
-  animation: dustFloat linear infinite;
-  will-change: transform, opacity;
-}
-
-/* ─── Grain Texture ────────────────────────────────────────── */
+/* ── Grain Texture ──────────────────────────────────────────── */
 .grain {
   position: absolute;
   inset: 0;
   z-index: 2;
   width: 100%;
   height: 100%;
-  opacity: 0.055;
-  pointer-events: none;
-}
-
-/* ─── Bottom Fade ──────────────────────────────────────────── */
-.bottomFade {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 200px;
-  z-index: 2;
-  background: linear-gradient(to bottom, transparent 0%, rgba(255, 250, 242, 0.5) 50%, #fffaf2 100%);
+  opacity: 0.05;
+  mix-blend-mode: overlay;
   pointer-events: none;
 }
 
@@ -130,11 +139,11 @@
   position: relative;
   z-index: 3;
   display: grid;
-  grid-template-columns: minmax(0, 0.88fr) minmax(340px, 1.12fr);
+  grid-template-columns: minmax(0, 0.92fr) minmax(320px, 1.05fr);
   align-items: center;
   gap: clamp(2rem, 4.5vw, 5rem);
   width: 100%;
-  max-width: 1520px;
+  max-width: 1480px;
   min-height: 100svh;
   margin: 0 auto;
   padding: clamp(6rem, 10vw, 8rem) clamp(2rem, 5vw, 4.5rem) clamp(4.5rem, 7vw, 6rem);
@@ -144,7 +153,7 @@
    LEFT — Copy
    ═══════════════════════════════════════════════════════════════ */
 .copy {
-  max-width: 640px;
+  max-width: 620px;
 }
 
 /* ── Brand Mark ──────────────────────────────────────────── */
@@ -155,18 +164,23 @@
   margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
 }
 
-.brandDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #d4b16f, #f0d9a0);
-  box-shadow:
-    0 0 10px rgba(212, 177, 111, 0.6),
-    0 0 28px rgba(212, 177, 111, 0.25);
+.brandSeal {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
 }
 
+.brandSeal circle {
+  fill: none;
+  stroke: var(--wood-honey);
+}
+
+.brandSeal circle:nth-child(1) { stroke-width: 2.5; }
+.brandSeal circle:nth-child(2) { stroke-width: 1.5; stroke: var(--wood-lacquer); }
+.brandSeal circle:nth-child(3) { fill: var(--wood-honey); stroke: none; }
+
 .brandName {
-  color: rgba(240, 217, 160, 0.85);
+  color: rgba(var(--wood-linen-rgb), 0.85);
   font-family: var(--font-display);
   font-size: 13px;
   font-weight: 500;
@@ -182,74 +196,69 @@
 
 .line1 {
   display: block;
-  color: rgba(255, 255, 255, 0.92);
+  color: rgba(var(--wood-linen-rgb), 0.94);
   font-family: var(--font-display);
-  font-size: clamp(3.4rem, 7vw, 6.4rem);
+  font-size: clamp(3.2rem, 6.6vw, 5.8rem);
   font-weight: 300;
-  font-style: italic;
   line-height: 1.08;
   letter-spacing: -0.01em;
 }
 
 .line2 {
   display: block;
+  color: var(--wood-honey-light);
   font-family: var(--font-display);
-  font-size: clamp(3.8rem, 7.8vw, 7.2rem);
-  font-weight: 500;
-  font-style: italic;
-  line-height: 1.02;
-  letter-spacing: 0.02em;
-  background: linear-gradient(135deg, #d4b16f 0%, #f0d9a0 35%, #b38a4a 70%, #d4b16f 100%);
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: goldShift 6s cubic-bezier(0.23, 1, 0.32, 1) infinite;
-  filter: drop-shadow(0 3px 24px rgba(212, 177, 111, 0.35));
+  font-size: clamp(3.6rem, 7.4vw, 6.6rem);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: 0.005em;
+  text-shadow:
+    0 2px 0 rgba(var(--wood-bark-rgb), 0.55),
+    0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 /* ── Subheadline ─────────────────────────────────────────── */
 .subhead {
-  max-width: 500px;
-  margin: clamp(1.5rem, 2.8vw, 2.2rem) 0 0;
-  color: rgba(255, 255, 255, 0.55);
+  max-width: 480px;
+  margin: clamp(1.4rem, 2.6vw, 2rem) 0 0;
+  color: rgba(var(--wood-linen-rgb), 0.58);
   font-family: var(--font-body);
-  font-size: clamp(1rem, 1.7vw, 1.15rem);
+  font-size: clamp(1rem, 1.6vw, 1.1rem);
   font-weight: 400;
-  line-height: 1.85;
-  letter-spacing: 0.02em;
+  line-height: 1.8;
+  letter-spacing: 0.015em;
 }
 
-/* ── Gold Divider ────────────────────────────────────────── */
+/* ── Grain Divider ────────────────────────────────────────── */
 .divider {
   display: flex;
   align-items: center;
-  gap: 12px;
-  width: 120px;
-  margin: clamp(1.5rem, 3vw, 2.5rem) 0;
+  gap: 10px;
+  width: 96px;
+  margin: clamp(1.4rem, 2.8vw, 2.2rem) 0;
   transform-origin: left center;
 }
 
 .dividerLine {
   flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, rgba(212, 177, 111, 0.6), rgba(212, 177, 111, 0.08));
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--wood-lacquer), rgba(var(--wood-lacquer-rgb), 0));
 }
 
-.dividerDiamond {
-  width: 6px;
-  height: 6px;
-  background: linear-gradient(135deg, #d4b16f, #f0d9a0);
-  transform: rotate(45deg);
-  box-shadow: 0 0 10px rgba(212, 177, 111, 0.5);
+.dividerRing {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1.5px solid var(--wood-honey);
 }
 
 /* ── CTA Buttons ─────────────────────────────────────────── */
 .actions {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  gap: 14px;
+  margin-top: clamp(1.5rem, 3vw, 2.3rem);
   flex-wrap: wrap;
 }
 
@@ -258,195 +267,165 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 18px 38px;
+  padding: 17px 32px;
   border: none;
-  border-radius: 6px;
-  background: linear-gradient(135deg, #d4b16f 0%, #f0d9a0 45%, #b38a4a 100%);
-  background-size: 200% 200%;
-  color: #0F0C08;
+  border-radius: 5px;
+  background: var(--wood-honey);
+  color: var(--wood-ink);
   font-family: var(--font-body);
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-  overflow: hidden;
   transition:
-    transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
-    box-shadow 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-  box-shadow:
-    0 4px 28px rgba(212, 177, 111, 0.35),
-    0 1px 4px rgba(0, 0, 0, 0.25);
-}
-
-.btnPrimary::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 25%,
-    rgba(255, 255, 255, 0.45) 45%,
-    rgba(255, 255, 255, 0.25) 50%,
-    rgba(255, 255, 255, 0.45) 55%,
-    transparent 75%
-  );
-  background-size: 300% 100%;
-  animation: btnShimmer 3s cubic-bezier(0.23, 1, 0.32, 1) infinite;
-  pointer-events: none;
+    transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+    background 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 6px 22px rgba(var(--wood-bark-rgb), 0.4);
 }
 
 .btnPrimary:hover {
-  transform: translateY(-2px) scale(1.03);
-  box-shadow:
-    0 10px 40px rgba(212, 177, 111, 0.5),
-    0 2px 8px rgba(0, 0, 0, 0.25);
+  background: var(--wood-honey-light);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(var(--wood-bark-rgb), 0.5);
 }
 
 .btnPrimary:active {
   transform: translateY(0) scale(0.98);
 }
 
-.btnLabel {
-  position: relative;
-  z-index: 1;
+.btnPrimary:focus-visible,
+.btnSecondary:focus-visible {
+  outline: 2px solid var(--wood-honey-light);
+  outline-offset: 3px;
 }
 
 .btnIconWrap {
-  position: relative;
-  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  background: rgba(15, 12, 8, 0.15);
-  transition:
-    transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
-    background 0.3s ease;
+  background: rgba(var(--wood-bark-rgb), 0.16);
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .btnPrimary:hover .btnIconWrap {
-  transform: translateX(3px) translateY(-1px);
-  background: rgba(15, 12, 8, 0.25);
+  transform: translateX(3px);
 }
 
 .btnSecondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 17px 34px;
-  border: 1px solid rgba(212, 177, 111, 0.35);
-  border-radius: 6px;
+  padding: 16px 30px;
+  border: 1px solid rgba(var(--wood-linen-rgb), 0.3);
+  border-radius: 5px;
   background: transparent;
-  color: rgba(240, 217, 160, 0.8);
+  color: rgba(var(--wood-linen-rgb), 0.85);
   font-family: var(--font-body);
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .btnSecondary:hover {
-  background: rgba(212, 177, 111, 0.1);
-  border-color: rgba(212, 177, 111, 0.65);
+  background: rgba(var(--wood-linen-rgb), 0.06);
+  border-color: rgba(var(--wood-linen-rgb), 0.55);
   transform: translateY(-2px);
-  box-shadow:
-    0 6px 24px rgba(212, 177, 111, 0.2),
-    0 0 40px rgba(212, 177, 111, 0.08);
 }
 
 .btnSecondary:active {
   transform: translateY(0) scale(0.98);
 }
 
-/* ── Trust Bento Cards ───────────────────────────────────── */
-.trustGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin-top: clamp(2.2rem, 4.5vw, 3.2rem);
-  max-width: 580px;
+/* ── Growth-Ring Stat Diagram ────────────────────────────── */
+.ringDiagram {
+  position: relative;
+  width: clamp(230px, 24vw, 300px);
+  aspect-ratio: 1 / 1;
+  margin-top: clamp(2.2rem, 4.2vw, 3rem);
 }
 
-.trustCard {
-  position: relative;
+.ringSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ringSvg .texture {
+  fill: none;
+  stroke: var(--wood-honey);
+  stroke-width: 1;
+}
+
+.ringSvg .pith {
+  fill: var(--wood-honey);
+}
+
+.ringSvg .leader {
+  stroke-width: 1.5;
+  fill: none;
+}
+
+.ringStat {
+  position: absolute;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 20px 16px 16px;
-  border: 1px solid rgba(212, 177, 111, 0.1);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.025);
-  backdrop-filter: blur(6px);
-  cursor: default;
-  overflow: hidden;
-  transition:
-    border-color 0.5s cubic-bezier(0.23, 1, 0.32, 1),
-    background 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  gap: 2px;
 }
 
-.trustCard:hover {
-  border-color: rgba(212, 177, 111, 0.3);
-  background: rgba(255, 255, 255, 0.045);
-}
-
-.trustCardAccent {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, rgba(212, 177, 111, 0.55), rgba(212, 177, 111, 0.05));
-  opacity: 0;
-  transition: opacity 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.trustCard:hover .trustCardAccent {
-  opacity: 1;
-}
-
-.trustCardIcon {
+.ringStatRow {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: rgba(212, 177, 111, 0.1);
-  color: #d4b16f;
+  gap: 6px;
 }
 
-.trustCardNumber {
+.ringStatNumber {
   font-family: var(--font-display);
-  font-size: 1.65rem;
+  font-size: clamp(1.05rem, 1.7vw, 1.3rem);
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.92);
-  line-height: 1.1;
+  line-height: 1;
 }
 
-.trustCardLabel {
+.ringStatLabel {
   font-family: var(--font-body);
-  font-size: 0.72rem;
+  font-size: 0.66rem;
   font-weight: 600;
-  color: rgba(240, 217, 160, 0.7);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  line-height: 1.2;
+  color: rgba(var(--wood-linen-rgb), 0.55);
+  white-space: nowrap;
 }
 
-.trustCardDesc {
-  font-family: var(--font-body);
-  font-size: 0.65rem;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.3);
-  line-height: 1.3;
+.ringStat1 {
+  left: 50%;
+  top: 13%;
+  transform: translate(-50%, -100%);
+  align-items: center;
+  text-align: center;
+}
+
+.ringStat2 {
+  left: 84%;
+  top: 76%;
+  text-align: left;
+}
+
+.ringStat3 {
+  left: 11%;
+  top: 78%;
+  transform: translate(-100%, 0);
+  align-items: flex-end;
+  text-align: right;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -461,26 +440,32 @@
 
 .visual {
   position: relative;
-  width: min(100%, 640px);
-  aspect-ratio: 1 / 1;
+  width: min(100%, 460px);
+  aspect-ratio: 4 / 5;
   transform-style: preserve-3d;
   will-change: transform;
 }
 
-/* ── Main Image Container ────────────────────────────────── */
-.imageContainer {
+.frame {
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 50%;
-  overflow: hidden;
-  background: radial-gradient(circle at 45% 40%, #2a2218 0%, #1a1510 40%, #0F0C08 100%);
+  padding: 13px;
+  border-radius: 10px;
+  background: linear-gradient(150deg, var(--wood-walnut) 0%, var(--wood-bark) 60%, var(--wood-walnut) 100%);
   box-shadow:
-    0 40px 100px rgba(0, 0, 0, 0.65),
-    0 16px 40px rgba(0, 0, 0, 0.45),
-    0 0 0 1px rgba(212, 177, 111, 0.08),
-    inset 0 2px 0 rgba(255, 255, 255, 0.05),
-    inset 0 -3px 12px rgba(0, 0, 0, 0.4);
+    0 36px 80px rgba(0, 0, 0, 0.5),
+    0 12px 30px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.frameInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  overflow: hidden;
+  background: var(--wood-ink);
 }
 
 .heroImg {
@@ -488,30 +473,75 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center center;
-  transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  object-position: center;
+  transition: transform 0.9s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .visual:hover .heroImg {
-  transform: scale(1.04);
+  transform: scale(1.045);
 }
 
-/* ── Light Sweep Shimmer ─────────────────────────────────── */
-.imageShimmer {
+.frameVignette {
   position: absolute;
   inset: 0;
   z-index: 2;
-  background: linear-gradient(
-    105deg,
-    transparent 28%,
-    rgba(240, 217, 160, 0.12) 43%,
-    rgba(255, 255, 255, 0.08) 50%,
-    rgba(240, 217, 160, 0.12) 57%,
-    transparent 72%
-  );
-  background-size: 280% 100%;
-  animation: imageSweep 7s cubic-bezier(0.23, 1, 0.32, 1) infinite;
   pointer-events: none;
+  background: linear-gradient(to top, rgba(var(--wood-bark-rgb), 0.45) 0%, transparent 35%);
+}
+
+/* ── Corner Marks ─────────────────────────────────────────── */
+.cornerMark {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-color: rgba(var(--wood-honey-rgb), 0.7);
+  border-style: solid;
+  border-radius: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.cornerTl { top: -9px; left: -9px; border-width: 2px 0 0 2px; }
+.cornerTr { top: -9px; right: -9px; border-width: 2px 2px 0 0; }
+.cornerBl { bottom: -9px; left: -9px; border-width: 0 0 2px 2px; }
+.cornerBr { bottom: -9px; right: -9px; border-width: 0 2px 2px 0; }
+
+/* ── Hanging Wood Tag ────────────────────────────────────── */
+.tag {
+  position: absolute;
+  bottom: -16px;
+  left: -22px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px 11px 24px;
+  border-radius: 3px;
+  background: var(--wood-linen);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+  transform: rotate(-6deg);
+}
+
+.tagHole {
+  position: absolute;
+  left: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--wood-bark);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+}
+
+.tagText {
+  font-family: var(--font-body);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--wood-bark);
+  line-height: 1.3;
 }
 
 /* ── Scroll Indicator ────────────────────────────────────── */
@@ -525,93 +555,19 @@
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  color: rgba(212, 177, 111, 0.35);
-  animation: scrollPulse 2.2s cubic-bezier(0.23, 1, 0.32, 1) infinite;
+  color: rgba(var(--wood-honey-rgb), 0.45);
 }
 
 .scrollLine {
   width: 1px;
-  height: 30px;
-  background: linear-gradient(to bottom, transparent, rgba(212, 177, 111, 0.25));
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   KEYFRAMES
-   ═══════════════════════════════════════════════════════════════ */
-
-@keyframes goldShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-@keyframes btnShimmer {
-  0% { background-position: 300% center; }
-  100% { background-position: -300% center; }
-}
-
-@keyframes imageSweep {
-  0%, 100% { background-position: 280% center; }
-  50% { background-position: -280% center; }
-}
-
-@keyframes blobDrift1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(20px, -15px) scale(1.03); }
-  50% { transform: translate(35px, 10px) scale(0.97); }
-  75% { transform: translate(-10px, -20px) scale(1.02); }
-}
-
-@keyframes blobDrift2 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(-20px, 15px) scale(1.05); }
-  50% { transform: translate(15px, 25px) scale(0.95); }
-  75% { transform: translate(25px, -10px) scale(1.03); }
-}
-
-@keyframes blobDrift3 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(15px, 20px) scale(0.97); }
-  50% { transform: translate(-20px, -15px) scale(1.04); }
-  75% { transform: translate(10px, 10px) scale(0.98); }
-}
-
-@keyframes dustFloat {
-  0% {
-    transform: translateY(0) translateX(0) scale(1);
-    opacity: var(--dust-opacity, 0.2);
-  }
-  20% {
-    transform: translateY(-10px) translateX(3px) scale(1.08);
-    opacity: calc(var(--dust-opacity, 0.2) * 1.4);
-  }
-  40% {
-    transform: translateY(-16px) translateX(-4px) scale(0.92);
-    opacity: var(--dust-opacity, 0.2);
-  }
-  60% {
-    transform: translateY(-8px) translateX(5px) scale(1.04);
-    opacity: calc(var(--dust-opacity, 0.2) * 1.2);
-  }
-  80% {
-    transform: translateY(-20px) translateX(-2px) scale(0.96);
-    opacity: calc(var(--dust-opacity, 0.2) * 0.7);
-  }
-  100% {
-    transform: translateY(0) translateX(0) scale(1);
-    opacity: var(--dust-opacity, 0.2);
-  }
-}
-
-@keyframes scrollPulse {
-  0%, 100% { opacity: 0.35; transform: translateX(-50%) translateY(0); }
-  50% { opacity: 0.65; transform: translateX(-50%) translateY(5px); }
+  height: 28px;
+  background: linear-gradient(to bottom, transparent, rgba(var(--wood-honey-rgb), 0.4));
 }
 
 /* ═══════════════════════════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════════════════════════ */
 
-/* Tablet */
 @media (max-width: 1100px) {
   .grid {
     grid-template-columns: 1fr;
@@ -645,8 +601,7 @@
     justify-content: center;
   }
 
-  .trustGrid {
-    max-width: none;
+  .ringDiagram {
     margin-left: auto;
     margin-right: auto;
   }
@@ -656,37 +611,18 @@
   }
 
   .visual {
-    width: min(100%, 520px);
-    aspect-ratio: 1 / 1;
+    width: min(100%, 420px);
   }
 
-  .blob1 {
-    width: 380px;
-    height: 380px;
-  }
-
-  .blob2 {
-    width: 320px;
-    height: 320px;
-  }
-
-  .blob3 {
+  .cornerMark,
+  .tag {
     display: none;
   }
 }
 
-/* Mobile */
 @media (max-width: 768px) {
   .hero {
     min-height: auto;
-  }
-
-  .hero::after {
-    background: radial-gradient(
-      ellipse 90% 80% at 50% 50%,
-      transparent 30%,
-      rgba(10, 8, 5, 0.35) 100%
-    );
   }
 
   .grid {
@@ -694,12 +630,7 @@
   }
 
   .visual {
-    width: min(100%, 400px);
-    aspect-ratio: 1 / 1;
-  }
-
-  .imageContainer {
-    border-radius: 50%;
+    width: min(100%, 340px);
   }
 
   .actions {
@@ -713,72 +644,61 @@
     justify-content: center;
   }
 
-  .trustGrid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-  }
-
-  .trustCard {
-    padding: 14px 10px 12px;
-    gap: 5px;
-  }
-
-  .trustCardIcon {
-    width: 30px;
-    height: 30px;
-  }
-
-  .trustCardNumber {
-    font-size: 1.3rem;
-  }
-
-  .trustCardLabel {
+  .ringStatLabel {
     font-size: 0.6rem;
-  }
-
-  .trustCardDesc {
-    display: none;
   }
 
   .scrollCue {
     bottom: 18px;
   }
 
-  .blob1 {
-    width: 280px;
-    height: 280px;
-    top: 5%;
-    right: 5%;
+  .progressBar {
+    height: 2px;
   }
 
-  .blob2 {
-    width: 220px;
-    height: 220px;
-    bottom: 10%;
-    left: 5%;
+  .bgMotif {
+    opacity: 0.05;
   }
 }
 
-/* Small Mobile */
 @media (max-width: 420px) {
   .grid {
     padding: clamp(4rem, 14vw, 5rem) var(--space-4) clamp(2rem, 8vw, 3rem);
   }
 
   .line1 {
-    font-size: clamp(2.5rem, 11vw, 3.4rem);
+    font-size: clamp(2.4rem, 10.5vw, 3.2rem);
   }
 
   .line2 {
-    font-size: clamp(2.8rem, 12.5vw, 4rem);
+    font-size: clamp(2.7rem, 12vw, 3.8rem);
   }
 
-  .visual {
-    width: 100%;
-    aspect-ratio: 1 / 1;
+  .ringDiagram {
+    width: clamp(210px, 64vw, 260px);
   }
 
-  .trustGrid {
-    gap: 6px;
+  .splashRings {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* ─── Reduced Motion ───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .bgMotif {
+    animation: none;
+  }
+
+  .splashRings circle {
+    animation: none;
+    opacity: 0.6;
+  }
+
+  .heroImg,
+  .btnPrimary,
+  .btnSecondary,
+  .btnIconWrap {
+    transition: none;
   }
 }

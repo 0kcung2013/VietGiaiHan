@@ -1,6 +1,6 @@
-import { useRef, useCallback, type MouseEvent } from 'react'
+import { useRef, useCallback, type MouseEvent, useEffect, useState } from 'react'
 import { motion, useMotionValue, useSpring, useTransform, useScroll, useInView, type Variants } from 'framer-motion'
-import { IconChevronDown, IconHammer, IconLeaf, IconShieldCheck, IconArrowRight } from '@tabler/icons-react'
+import { IconChevronDown, IconHammer, IconLeaf, IconPackage, IconArrowRight } from '@tabler/icons-react'
 import heroWood from '../../../assets/images/hero-wood.jpg'
 import styles from './index.module.css'
 
@@ -14,11 +14,11 @@ const containerVariants: Variants = {
 const cubicSmooth: [number, number, number, number] = [0.23, 1, 0.32, 1]
 
 const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 28 },
+  hidden: { opacity: 0, y: 24 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.75, ease: cubicSmooth },
+    transition: { duration: 0.7, ease: cubicSmooth },
   },
 }
 
@@ -26,79 +26,89 @@ const scaleLine: Variants = {
   hidden: { scaleX: 0 },
   visible: {
     scaleX: 1,
-    transition: { duration: 0.85, ease: cubicSmooth, delay: 0.6 },
+    transition: { duration: 0.75, ease: cubicSmooth, delay: 0.55 },
   },
 }
 
-const staggerContainer: Variants = {
+const ringContainer: Variants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
+  visible: { transition: { staggerChildren: 0.15, delayChildren: 0.65 } },
 }
 
-const cardReveal: Variants = {
-  hidden: { opacity: 0, y: 20, scale: 0.97 },
+const ringReveal: Variants = {
+  hidden: { opacity: 0, scale: 0.9 },
   visible: {
     opacity: 1,
-    y: 0,
     scale: 1,
-    transition: { duration: 0.65, ease: cubicSmooth },
+    transition: { duration: 0.6, ease: cubicSmooth },
   },
 }
 
 /* ─── Data ────────────────────────────────────────────────────── */
+/* Three growth rings of the timber slice — heart (years of mastery),
+   heartwood (finished pieces), bark (the natural material holding it all). */
 
-const trustCards = [
+const ringStats = [
   {
-    icon: IconShieldCheck,
+    id: 'years',
     number: '10+',
-    label: 'Năm Nghệ Nhân',
-    desc: 'Kinh nghiệm chế tác',
+    label: 'Năm Kinh Nghiệm',
+    color: 'var(--wood-honey)',
+    icon: IconHammer,
+    posClass: styles.ringStat1,
   },
   {
-    icon: IconHammer,
+    id: 'products',
     number: '500+',
     label: 'Sản Phẩm',
-    desc: 'Hoàn thiện thủ công',
+    color: 'var(--wood-lacquer)',
+    icon: IconPackage,
+    posClass: styles.ringStat2,
   },
   {
-    icon: IconLeaf,
+    id: 'natural',
     number: '100%',
-    label: 'Tự Nhiên',
-    desc: 'Gỗ tuyển chọn',
+    label: 'Gỗ Tự Nhiên',
+    color: 'var(--wood-jade)',
+    icon: IconLeaf,
+    posClass: styles.ringStat3,
   },
 ]
-
-const dustParticles = Array.from({ length: 35 }, (_, i) => ({
-  id: i,
-  size: 1.2 + (i % 6) * 0.7,
-  x: (i * 2.9 + 3) % 100,
-  y: (i * 6.3 + 4) % 100,
-  dur: 5.5 + (i % 8) * 1.8,
-  delay: i * 0.22,
-  opacity: 0.12 + (i % 5) * 0.1,
-}))
 
 /* ─── Component ───────────────────────────────────────────────── */
 
 export function Hero() {
   const heroRef = useRef<HTMLDivElement>(null)
   const visualRef = useRef<HTMLDivElement>(null)
+  const [isLoaded, setIsLoaded] = useState(false)
   const isInView = useInView(visualRef, { once: true, margin: '-50px' })
 
-  /* Mouse parallax */
+  /* ── Loading Splash ── */
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoaded(true), 700)
+    return () => clearTimeout(timer)
+  }, [])
+
+  /* ── Mouse parallax (subtle — this is furniture, not glass) ── */
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
-  const springCfg = { stiffness: 55, damping: 16 }
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [10, -10]), springCfg)
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-12, 12]), springCfg)
+  const springCfg = { stiffness: 60, damping: 18 }
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [4, -4]), springCfg)
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-5, 5]), springCfg)
 
-  /* Scroll parallax for main image */
+  /* ── Scroll parallax ── */
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ['start start', 'end start'],
   })
-  const imageY = useTransform(scrollYProgress, [0, 1], [0, 140])
+  const imageY = useTransform(scrollYProgress, [0, 1], [0, 120])
+  const opacityProgress = useTransform(scrollYProgress, [0, 0.5], [1, 0.3])
 
+  /* ── Progress Bar ── */
+  const { scrollYProgress: globalScroll } = useScroll()
+  const progressBar = useTransform(globalScroll, [0, 0.3], ['0%', '100%'])
+
+  /* ── Event handlers ── */
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
       const rect = heroRef.current?.getBoundingClientRect()
@@ -115,159 +125,234 @@ export function Hero() {
   }, [mouseX, mouseY])
 
   return (
-    <section className={styles.hero} id="hero" ref={heroRef}>
-      {/* ── Ambient Blobs ── */}
-      <div className={styles.blobs} aria-hidden="true">
-        <span className={styles.blob1} />
-        <span className={styles.blob2} />
-        <span className={styles.blob3} />
-      </div>
-
-      {/* ── Gold Dust Particles ── */}
-      <div className={styles.dustLayer} aria-hidden="true">
-        {dustParticles.map((p) => (
-          <span
-            key={p.id}
-            className={styles.dust}
-            style={{
-              left: `${p.x}%`,
-              top: `${p.y}%`,
-              width: p.size,
-              height: p.size,
-              opacity: p.opacity,
-              animationDuration: `${p.dur}s`,
-              animationDelay: `${p.delay}s`,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* ── Grain Texture ── */}
-      <svg className={styles.grain} aria-hidden="true">
-        <filter id="hero-grain-luxury">
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.85"
-            numOctaves="4"
-            stitchTiles="stitch"
-          />
-          <feColorMatrix type="saturate" values="0" />
-        </filter>
-        <rect width="100%" height="100%" filter="url(#hero-grain-luxury)" />
-      </svg>
-
-      {/* ── Bottom Fade ── */}
-      <div className={styles.bottomFade} aria-hidden="true" />
-
-      {/* ── Main Grid ── */}
-      <motion.div
-        className={styles.grid}
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        {/* ═══════════ LEFT: Copy ═══════════ */}
-        <div className={styles.copy}>
-          {/* Brand Mark */}
-          <motion.div className={styles.brandMark} variants={fadeUp}>
-            <span className={styles.brandDot} />
-            <span className={styles.brandName}>Việt Giai Hân Studio</span>
-          </motion.div>
-
-          {/* Headline */}
-          <motion.h1 className={styles.headline} variants={fadeUp}>
-            <span className={styles.line1}>Nghệ thuật từ</span>
-            <span className={styles.line2}>gỗ Việt Nam</span>
-          </motion.h1>
-
-          {/* Subheadline */}
-          <motion.p className={styles.subhead} variants={fadeUp}>
-            Chế tác thủ công tinh hoa, kết nối truyền thống với đương đại
-          </motion.p>
-
-          {/* Gold Divider */}
-          <motion.div className={styles.divider} variants={scaleLine}>
-            <span className={styles.dividerLine} />
-            <span className={styles.dividerDiamond} />
-            <span className={styles.dividerLine} />
-          </motion.div>
-
-          {/* CTA Buttons */}
-          <motion.div className={styles.actions} variants={fadeUp}>
-            <a className={styles.btnPrimary} href="#products">
-              <span className={styles.btnLabel}>Xem Bộ Sưu Tập</span>
-              <span className={styles.btnIconWrap}>
-                <IconArrowRight size={16} stroke={2} />
-              </span>
-            </a>
-            <a className={styles.btnSecondary} href="#contact">
-              Nhận Tư Vấn
-            </a>
-          </motion.div>
-
-          {/* Trust Bento Cards */}
-          <motion.div
-            className={styles.trustGrid}
-            variants={staggerContainer}
-            initial="hidden"
-            animate="visible"
-          >
-            {trustCards.map((card) => (
-              <motion.div
-                className={styles.trustCard}
-                key={card.label}
-                variants={cardReveal}
-                whileHover={{ y: -4, transition: { duration: 0.35, ease: cubicSmooth } }}
-              >
-                <div className={styles.trustCardAccent} />
-                <div className={styles.trustCardIcon}>
-                  <card.icon size={20} stroke={1.5} />
-                </div>
-                <span className={styles.trustCardNumber}>{card.number}</span>
-                <span className={styles.trustCardLabel}>{card.label}</span>
-                <span className={styles.trustCardDesc}>{card.desc}</span>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-
-        {/* ═══════════ RIGHT: Visual ═══════════ */}
+    <div className={styles.root}>
+      {/* ─── Loading Splash ─── */}
+      {!isLoaded && (
         <motion.div
-          className={styles.visualWrap}
-          initial={{ opacity: 0, x: 40 }}
-          animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 40 }}
-          transition={{ duration: 0.95, ease: cubicSmooth, delay: 0.4 }}
+          className={styles.splash}
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 0 }}
+          transition={{ duration: 1.1, delay: 0.55 }}
+          style={{ pointerEvents: 'none' }}
         >
-          <motion.div
-            ref={visualRef}
-            className={styles.visual}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            style={{
-              rotateX,
-              rotateY,
-              transformPerspective: 1200,
-            }}
+          <svg className={styles.splashRings} viewBox="0 0 56 56" aria-hidden="true">
+            <circle cx="28" cy="28" r="10" />
+            <circle cx="28" cy="28" r="17" />
+            <circle cx="28" cy="28" r="24" />
+          </svg>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25 }}
+            className={styles.splashText}
           >
-            {/* Main image container */}
-            <motion.div className={styles.imageContainer} style={{ y: imageY }}>
-              <div className={styles.imageShimmer} />
-              <img
-                src={heroWood}
-                alt="Đồ gỗ mỹ nghệ Việt Giai Hân — Chế tác thủ công tinh xảo"
-                className={styles.heroImg}
-                draggable={false}
-              />
+            Việt Giai Hân Studio
+          </motion.p>
+        </motion.div>
+      )}
+
+      {/* ─── Progress Bar ─── */}
+      <motion.div className={styles.progressBar} style={{ scaleX: progressBar }} />
+
+      {/* ─── Section ─── */}
+      <section className={styles.hero} id="hero" ref={heroRef}>
+        {/* ── Ambient Growth-Ring Motif ── */}
+        <svg className={styles.bgMotif} viewBox="0 0 400 400" aria-hidden="true">
+          <circle cx="200" cy="200" r="60" strokeWidth="1.5" />
+          <circle cx="200" cy="200" r="100" strokeWidth="1.5" />
+          <circle cx="200" cy="200" r="140" strokeWidth="1.5" />
+          <circle cx="200" cy="200" r="175" strokeWidth="1.5" />
+          <circle cx="200" cy="200" r="198" strokeWidth="2.5" />
+        </svg>
+
+        {/* ── Grain Texture ── */}
+        <svg className={styles.grain} aria-hidden="true">
+          <filter id="hero-grain-wood">
+            <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
+            <feColorMatrix type="saturate" values="0" />
+          </filter>
+          <rect width="100%" height="100%" filter="url(#hero-grain-wood)" />
+        </svg>
+
+        {/* ── Main Grid ── */}
+        <motion.div
+          className={styles.grid}
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          style={{ opacity: opacityProgress }}
+        >
+          {/* ═══════════ LEFT: Copy ═══════════ */}
+          <div className={styles.copy}>
+            {/* Brand Mark — a maker's seal, like a stamp on a finished piece */}
+            <motion.div className={styles.brandMark} variants={fadeUp}>
+              <svg className={styles.brandSeal} viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <circle cx="12" cy="12" r="6" />
+                <circle cx="12" cy="12" r="1.6" />
+              </svg>
+              <span className={styles.brandName}>Việt Giai Hân Studio</span>
+            </motion.div>
+
+            {/* Headline */}
+            <motion.h1 className={styles.headline} variants={fadeUp}>
+              <span className={styles.line1}>Nghệ thuật từ</span>
+              <span className={styles.line2}>gỗ Việt Nam</span>
+            </motion.h1>
+
+            {/* Subheadline */}
+            <motion.p className={styles.subhead} variants={fadeUp}>
+              Chế tác thủ công tinh hoa, kết nối truyền thống với đương đại
+            </motion.p>
+
+            {/* Divider */}
+            <motion.div className={styles.divider} variants={scaleLine}>
+              <span className={styles.dividerLine} />
+              <span className={styles.dividerRing} />
+            </motion.div>
+
+            {/* CTA Buttons */}
+            <motion.div className={styles.actions} variants={fadeUp}>
+              <motion.a
+                className={styles.btnPrimary}
+                href="#products"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.96 }}
+              >
+                <span>Xem Bộ Sưu Tập</span>
+                <span className={styles.btnIconWrap}>
+                  <IconArrowRight size={16} stroke={2} />
+                </span>
+              </motion.a>
+              <motion.a
+                className={styles.btnSecondary}
+                href="#contact"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                Nhận Tư Vấn
+              </motion.a>
+            </motion.div>
+
+            {/* Growth-Ring Stat Diagram — vòng tuổi gỗ */}
+            <motion.div
+              className={styles.ringDiagram}
+              variants={ringContainer}
+              initial="hidden"
+              animate="visible"
+            >
+              <svg className={styles.ringSvg} viewBox="0 0 300 300" aria-hidden="true">
+                <circle className={styles.texture} cx="150" cy="150" r="14" opacity="0.12" />
+                <circle className={styles.texture} cx="150" cy="150" r="24" opacity="0.12" />
+                <circle className={styles.texture} cx="150" cy="150" r="34" opacity="0.1" />
+                <circle className={styles.texture} cx="150" cy="150" r="60" opacity="0.1" />
+                <circle className={styles.texture} cx="150" cy="150" r="84" opacity="0.08" />
+                <circle className={styles.texture} cx="150" cy="150" r="110" opacity="0.06" />
+
+                <motion.circle
+                  variants={ringReveal}
+                  cx="150"
+                  cy="150"
+                  r="46"
+                  fill="none"
+                  stroke="var(--wood-honey)"
+                  strokeWidth="7"
+                />
+                <motion.circle
+                  variants={ringReveal}
+                  cx="150"
+                  cy="150"
+                  r="72"
+                  fill="none"
+                  stroke="var(--wood-lacquer)"
+                  strokeWidth="7"
+                />
+                <motion.circle
+                  variants={ringReveal}
+                  cx="150"
+                  cy="150"
+                  r="98"
+                  fill="none"
+                  stroke="var(--wood-jade)"
+                  strokeWidth="7"
+                />
+
+                <circle className={styles.pith} cx="150" cy="150" r="5" />
+
+                <line className={styles.leader} x1="150" y1="104" x2="150" y2="52" stroke="var(--wood-honey)" opacity="0.55" />
+                <line className={styles.leader} x1="201" y1="201" x2="246" y2="234" stroke="var(--wood-lacquer)" opacity="0.55" />
+                <line className={styles.leader} x1="70" y1="206" x2="40" y2="238" stroke="var(--wood-jade)" opacity="0.55" />
+              </svg>
+
+              {ringStats.map((stat) => (
+                <motion.div className={`${styles.ringStat} ${stat.posClass}`} key={stat.id} variants={ringReveal}>
+                  <div className={styles.ringStatRow} style={{ color: stat.color }}>
+                    <stat.icon size={14} stroke={1.75} />
+                    <span className={styles.ringStatNumber}>{stat.number}</span>
+                  </div>
+                  <span className={styles.ringStatLabel}>{stat.label}</span>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* ═══════════ RIGHT: Visual ═══════════ */}
+          <motion.div
+            className={styles.visualWrap}
+            initial={{ opacity: 0, x: 36 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 36 }}
+            transition={{ duration: 0.9, ease: cubicSmooth, delay: 0.4 }}
+          >
+            <motion.div
+              ref={visualRef}
+              className={styles.visual}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+              style={{ rotateX, rotateY, transformPerspective: 1200 }}
+            >
+              <motion.div className={styles.frame} style={{ y: imageY }}>
+                <div className={styles.frameInner}>
+                  <img
+                    src={heroWood}
+                    alt="Đồ gỗ mỹ nghệ Việt Giai Hân — Chế tác thủ công tinh xảo"
+                    className={styles.heroImg}
+                    draggable={false}
+                    loading="lazy"
+                  />
+                  <div className={styles.frameVignette} />
+                </div>
+
+                {/* Carpenter's corner marks */}
+                <span className={`${styles.cornerMark} ${styles.cornerTl}`} aria-hidden="true" />
+                <span className={`${styles.cornerMark} ${styles.cornerTr}`} aria-hidden="true" />
+                <span className={`${styles.cornerMark} ${styles.cornerBl}`} aria-hidden="true" />
+                <span className={`${styles.cornerMark} ${styles.cornerBr}`} aria-hidden="true" />
+
+                {/* Hanging wood tag */}
+                <div className={styles.tag} aria-hidden="true">
+                  <span className={styles.tagHole} />
+                  <span className={styles.tagText}>
+                    Mộc Thủ Công
+                    <br />
+                    Bình Dương
+                  </span>
+                </div>
+              </motion.div>
             </motion.div>
           </motion.div>
         </motion.div>
-      </motion.div>
 
-      {/* ── Scroll Indicator ── */}
-      <div className={styles.scrollCue} aria-hidden="true">
-        <span className={styles.scrollLine} />
-        <IconChevronDown size={18} stroke={1.5} />
-      </div>
-    </section>
+        {/* ── Scroll Indicator ── */}
+        <motion.div
+          className={styles.scrollCue}
+          aria-hidden="true"
+          animate={{ y: [0, 8, 0], opacity: [0.3, 0.8, 0.3] }}
+          transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <span className={styles.scrollLine} />
+          <IconChevronDown size={18} stroke={1.5} />
+        </motion.div>
+      </section>
+    </div>
   )
 }
